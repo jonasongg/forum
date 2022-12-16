@@ -1,4 +1,4 @@
 class PostSerializer
   include JSONAPI::Serializer
-  attributes :title, :body
+  attributes :title, :body, :created_at
 end
