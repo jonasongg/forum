@@ -19,7 +19,7 @@ module Api
         if post.save
           render json: PostSerializer.new(@post).serializable_hash.to_json
         else
-          render json: { error: airline.error.messages }, status: :unprocessable entity
+          render json: { error: airline.error.messages }, status: :unprocessable_entity
         end
       end
 
@@ -29,7 +29,7 @@ module Api
         if post.update(post_params)
           render json: PostSerializer.new(@post).serializable_hash.to_json
         else
-          render json: { error: airline.error.messages }, status: :unprocessable entity
+          render json: { error: airline.error.messages }, status: :unprocessable_entity
         end
       end
 
@@ -39,12 +39,13 @@ module Api
         if post.destroy
           render json: PostSerializer.new(@post).serializable_hash.to_json
         else
-          render json: { error: airline.error.messages }, status: :unprocessable entity
+          render json: { error: airline.error.messages }, status: :unprocessable_entity
         end
       end
 
       def post_params
         params.require(:title, :body)
+      end
     end
   end
 end
