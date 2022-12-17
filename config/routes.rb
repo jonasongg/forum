@@ -1,12 +1,13 @@
 Rails.application.routes.draw do
-  root "homepage#index"
-  
+  #Root path
+  root 'homepage#index'
+
   namespace :api do
     namespace :v1 do
       resources :posts, except: [:new, :edit]
     end
   end
 
-  #Root path
-
+  #If the route doesn't match, then go to root path
+  get '/*path' => 'homepage#index'
 end
