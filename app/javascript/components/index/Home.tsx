@@ -1,8 +1,8 @@
 import React, { useState, useEffect } from 'react'
 import axios from 'axios'
 
-const Home = () => {
-  const [posts, setPosts] = useState([])
+const Home: React.FC = () => {
+  const [posts, setPosts] = useState<any[]>([])
 
   useEffect(() => {
     axios.get('api/v1/posts.json')
