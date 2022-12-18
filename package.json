@@ -1,31 +1,37 @@
 {
-  "name": "app",
-  "private": "true",
-  "dependencies": {
-    "@hotwired/stimulus": "^3.2.1",
-    "@hotwired/turbo-rails": "^7.2.4",
-    "@popperjs/core": "^2.11.6",
-    "axios": "^1.2.1",
-    "bootstrap": "^5.2.3",
-    "bootstrap-icons": "^1.10.2",
-    "esbuild": "^0.16.7",
-    "global": "^4.4.0",
-    "react": "^18.2.0",
-    "react-dom": "^18.2.0",
-    "react-router-dom": "^6.4.5",
-    "sass": "^1.56.2",
-    "styled-components": "^5.3.6",
-    "typescript": "^4.9.4"
-  },
-  "scripts": {
-    "build": "esbuild app/javascript/*.* --bundle --sourcemap --outdir=app/assets/builds --public-path=assets --loader:.js=jsx",
-    "build:css": "sass ./app/assets/stylesheets/application.bootstrap.scss:./app/assets/builds/application.css --no-source-map --load-path=node_modules",
-    "failure:js": "rm ./app/assets/builds/application.js && rm ./app/assets/builds/application.js.map",
-    "dev": "tsc-watch --noClear -p tsconfig.json --onSuccess \"yarn build:js\" --onFailure \"yarn failure:js\""
-  },
-  "devDependencies": {
-    "@types/react": "^18.0.26",
-    "@types/react-dom": "^18.0.9",
-    "tsc-watch": "^6.0.0"
-  }
+    "name": "app",
+    "private": "true",
+    "dependencies": {
+        "@hotwired/stimulus": "^3.2.1",
+        "@hotwired/turbo-rails": "^7.2.4",
+        "@popperjs/core": "^2.11.6",
+        "axios": "^1.2.1",
+        "bootstrap": "^5.2.3",
+        "bootstrap-icons": "^1.10.2",
+        "esbuild": "^0.16.7",
+        "eslint": "^8.30.0",
+        "global": "^4.4.0",
+        "react": "^18.2.0",
+        "react-dom": "^18.2.0",
+        "react-router-dom": "^6.4.5",
+        "sass": "^1.56.2",
+        "styled-components": "^5.3.6",
+        "typescript": "^4.9.4"
+    },
+    "scripts": {
+        "build:js": "esbuild app/javascript/*.* --bundle --sourcemap --outdir=app/assets/builds --public-path=assets --loader:.js=jsx",
+        "build:css": "sass ./app/assets/stylesheets/application.bootstrap.scss:./app/assets/builds/application.css --no-source-map --load-path=node_modules",
+        "failure:js": "rm ./app/assets/builds/application.js && rm ./app/assets/builds/application.js.map",
+        "dev": "tsc-watch --noClear -p tsconfig.json --onSuccess \"yarn build:js\" --onFailure \"yarn failure:js\""
+    },
+    "devDependencies": {
+        "@types/react": "^18.0.26",
+        "@types/react-dom": "^18.0.9",
+        "@types/styled-components": "^5.1.26",
+        "@typescript-eslint/eslint-plugin": "^5.46.1",
+        "@typescript-eslint/parser": "^5.46.1",
+        "eslint-plugin-react": "^7.31.11",
+        "prettier": "2.8.1",
+        "tsc-watch": "^6.0.0"
+    }
 }
