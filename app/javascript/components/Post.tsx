@@ -1,5 +1,5 @@
-import React from 'react'
+import React from 'react';
 
-const Post = () => <div>Post</div>
+const Post = () => <div>Post</div>;
 
-export default Post
+export default Post;
