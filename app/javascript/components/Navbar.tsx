@@ -7,12 +7,14 @@ const Nav = styled.nav`
     justify-content: space-between;
     align-items: center;
 
-    width: 70%;
+    width: 100%;
     position: sticky;
     top: 0;
     padding: 20px;
-    margin: 0px 15% 0px 15%;
-    font-family: Segoe UI;
+    padding-left: 15%;
+    padding-right: 15%;
+    background-color: white;
+    border-radius: 10px;
 `;
 
 const HomeLogo = styled.text`
@@ -36,11 +38,11 @@ const SearchInput = styled.input`
     height: 40px;
     width: 30%;
     padding-left: 40px;
-    background: #f2f2f2
+    background: #f5f5f5
         url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' class='bi bi-search' viewBox='0 0 16 16'%3E%3Cpath d='M11.742 10.344a6.5 6.5 0 1 0-1.397 1.398h-.001c.03.04.062.078.098.115l3.85 3.85a1 1 0 0 0 1.415-1.414l-3.85-3.85a1.007 1.007 0 0 0-.115-.1zM12 6.5a5.5 5.5 0 1 1-11 0 5.5 5.5 0 0 1 11 0z'%3E%3C/path%3E%3C/svg%3E")
         no-repeat 13px center;
     outline: none;
-    border: 2px solid #f2f2f2;
+    border: 2px solid #f5f5f5;
     border-radius: 10px;
     :focus {
         border: 2px solid #e0e0e0;

@@ -3,10 +3,11 @@ import axios from 'axios';
 import styled from 'styled-components';
 import Card from './Card';
 
-const PostWrapper = styled.div`
-    margin: 0px 15% 0px 15%;
+const PostsWrapper = styled.div`
+    margin: 20px 15% 0px 15%;
     width: 70%;
-    font-family: Segoe UI;
+    background-color: white;
+    border-radius: 10px;
 `;
 
 const Home: React.FC = () => {
@@ -23,7 +24,7 @@ const Home: React.FC = () => {
     <Card key={post.attributes.title} title={post.attributes.title} />
   ));
 
-  return <PostWrapper>{postList}</PostWrapper>;
+  return <PostsWrapper>{postList}</PostsWrapper>;
 };
 
 export default Home;

@@ -8,15 +8,15 @@ type CardProps = {
 
 const CardWrapper = styled.div`
     width: 100%;
-    border-radius: 10px;
-    padding: 15px;
+    padding: 20px;
     color: black;
     font-weight: 600;
+    font-size: large;
     text-decoration: none;
     display: inline-block;
 
     :hover {
-        background-color: #f5f5f5;
+        background-color: #f9f9f9;
     }
 `;
 
