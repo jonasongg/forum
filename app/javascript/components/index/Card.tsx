@@ -9,9 +9,6 @@ type CardProps = {
 const CardWrapper = styled.div`
     width: 100%;
     padding: 20px;
-    color: black;
-    font-weight: 600;
-    font-size: large;
     text-decoration: none;
     display: inline-block;
 
@@ -20,10 +17,18 @@ const CardWrapper = styled.div`
     }
 `;
 
+const CardTitle = styled.div`
+    color: black;
+    font-weight: 600;
+    font-size: large;
+`;
+
 const Card: React.FC<CardProps> = (props: CardProps) => {
   return (
     <Link to="/post">
-      <CardWrapper>{props.title}</CardWrapper>
+      <CardWrapper>
+        <CardTitle>{props.title}</CardTitle>
+      </CardWrapper>
     </Link>
   );
 };

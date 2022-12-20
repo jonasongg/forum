@@ -7,7 +7,6 @@ const Nav = styled.nav`
     justify-content: space-between;
     align-items: center;
 
-    width: 100%;
     position: sticky;
     top: 0;
     padding: 20px;
@@ -15,6 +14,7 @@ const Nav = styled.nav`
     padding-right: 15%;
     background-color: white;
     border-radius: 10px;
+    box-shadow: 0px 0px 2px 1px rgba(0, 0, 0, 0.02);
 `;
 
 const HomeLogo = styled.text`
@@ -56,14 +56,6 @@ const LoginButton = styled.div`
     text-align: center;
     color: #050505;
 `;
-
-// text-align: center;
-// line-height: 30px;
-
-// height: 35px;
-// width: 15%;
-// border: 2px solid #1560bd;
-// border-radius: 5px;
 
 const SignupButton = styled.div`
     width: 10%;
