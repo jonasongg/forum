@@ -4,6 +4,8 @@ import { Link } from 'react-router-dom';
 
 type CardProps = {
     title: string;
+    author: string;
+    date: string;
 };
 
 const CardWrapper = styled.div`
@@ -23,11 +25,20 @@ const CardTitle = styled.div`
     font-size: large;
 `;
 
+const CardSubtext = styled.div`
+    color: gray;
+    font-weight: 400;
+    font-size: small;
+`;
+
 const Card: React.FC<CardProps> = (props: CardProps) => {
   return (
     <Link to="/post">
       <CardWrapper>
         <CardTitle>{props.title}</CardTitle>
+        <CardSubtext>
+                    by {props.author} • {props.date}
+        </CardSubtext>
       </CardWrapper>
     </Link>
   );

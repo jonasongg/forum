@@ -1,7 +1,7 @@
 import React from 'react';
 import { Routes, Route } from 'react-router-dom';
 import Home from './index/Home';
-import Post from './Post';
+import Post from './show/Post';
 import Navbar from './Navbar';
 import Sidebar from './Sidebar';
 import styled from 'styled-components';

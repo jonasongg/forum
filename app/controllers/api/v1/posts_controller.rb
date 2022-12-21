@@ -4,7 +4,7 @@ module Api
       def index
         @posts = Post.all
         
-        render json: PostSerializer.new(@posts).serializable_hash.to_json
+        render json: PostSerializer.new(@posts, include: [:user]).serializable_hash.to_json
       end
 
       def show
