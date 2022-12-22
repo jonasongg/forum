@@ -17,12 +17,10 @@ const Nav = styled.nav`
     box-shadow: 0px 0px 2px 1px rgba(0, 0, 0, 0.02);
 `;
 
-const HomeLogo = styled.text`
-    display: inline-block;
+const HomeLogo = styled.div`
     font-size: 1.5rem;
     font-weight: 600;
     font-family: Poppins;
-    text-decoration: none;
     color: black;
 `;
 
@@ -66,7 +64,7 @@ const SignupButton = styled.div`
 const Navbar: React.FC = () => {
   return (
     <Nav>
-      <Link to="/">
+      <Link to="/" style={{ textDecoration: 'none' }}>
         <HomeLogo>forum</HomeLogo>
       </Link>
       <AlignRight>

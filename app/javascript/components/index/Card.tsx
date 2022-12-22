@@ -3,6 +3,7 @@ import styled from 'styled-components';
 import { Link } from 'react-router-dom';
 
 type CardProps = {
+    id: number;
     title: string;
     author: string;
     date: string;
@@ -11,8 +12,6 @@ type CardProps = {
 const CardWrapper = styled.div`
     width: 100%;
     padding: 20px;
-    text-decoration: none;
-    display: inline-block;
 
     :hover {
         background-color: #f9f9f9;
@@ -33,7 +32,7 @@ const CardSubtext = styled.div`
 
 const Card: React.FC<CardProps> = (props: CardProps) => {
   return (
-    <Link to="/post">
+    <Link to={`/posts/${props.id}`} style={{ textDecoration: 'none' }}>
       <CardWrapper>
         <CardTitle>{props.title}</CardTitle>
         <CardSubtext>

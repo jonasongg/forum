@@ -5,7 +5,7 @@ import Card from './Card';
 import { Post, User } from '../types';
 
 const HomeWrapper = styled.div`
-    flex-grow: 1;
+    width: 75%;
     background-color: white;
     border-radius: 10px;
     box-shadow: 0px 0px 2px 1px rgba(0, 0, 0, 0.02);
@@ -17,12 +17,12 @@ const Home: React.FC = () => {
 
   useEffect(() => {
     axios
-      .get('api/v1/posts.json')
+      .get('api/v1/posts')
       .then((rsp) => {
         setPosts(rsp.data.data);
         setUsers(rsp.data.included);
       })
-      .catch((rsp) => console.log(rsp));
+      .catch(console.log);
   }, [posts.length]); //Only call API again when posts change (change since posts can be edited)
 
   const getAuthor = (author: Post['relationships']['user']['data']) =>
@@ -33,6 +33,7 @@ const Home: React.FC = () => {
   const postList = posts.map((post) => (
     <Card
       key={post.attributes.title}
+      id={post.id}
       title={post.attributes.title}
       author={getAuthor(post.relationships.user.data)}
       date={post.attributes.created_at}

@@ -10,7 +10,7 @@ module Api
       def show
         @post = Post.find(params[:id])
 
-        render json: PostSerializer.new(@post).serializable_hash.to_json
+        render json: PostSerializer.new(@post, include: [:user]).serializable_hash.to_json
       end
 
       def create

@@ -27,7 +27,7 @@ const App: React.FC = () => {
         <Sidebar />
         <Routes>
           <Route path="/" element={<Home />} />
-          <Route path="/post" element={<Post />} />
+          <Route path="/posts/:id" element={<Post />} />
         </Routes>
       </ContentWrapper>
     </Wrapper>
