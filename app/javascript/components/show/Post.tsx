@@ -2,7 +2,7 @@ import axios from 'axios';
 import React, { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import styled from 'styled-components';
-import { Post, User } from '../types';
+import { Post } from '../types';
 
 const PostWrapper = styled.div`
     width: 75%;
@@ -32,7 +32,6 @@ const PostBody = styled.div`
 `;
 
 const Post: React.FC = () => {
-  const [user, setUser] = useState<User>();
   const [post, setPost] = useState<Post>();
   const params = useParams();
 
@@ -41,7 +40,6 @@ const Post: React.FC = () => {
       .get(`http://localhost:3000/api/v1/posts/${params.id}`)
       .then((rsp) => {
         setPost(rsp.data.data);
-        setUser(rsp.data.included[0]);
       })
       .catch(console.log);
   }, []);
@@ -49,7 +47,7 @@ const Post: React.FC = () => {
   return (
     <PostWrapper>
       <PostSubtext>
-                Posted by {user?.attributes.username} •{' '}
+                Posted by {post?.attributes.user.username} •{' '}
         {post?.attributes.created_at}
       </PostSubtext>
       <PostTitle>{post?.attributes.title}</PostTitle>
