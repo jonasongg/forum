@@ -2,15 +2,15 @@ module Api
   module V1
     class PostsController < ApplicationController
       def index
-        @posts = Post.all
+        @posts = Post.order(created_at: :desc)
         
-        render json: PostSerializer.new(@posts, include: [:user]).serializable_hash.to_json
+        render json: PostSerializer.new(@posts).serializable_hash.to_json
       end
 
       def show
         @post = Post.find(params[:id])
 
-        render json: PostSerializer.new(@post, include: [:user]).serializable_hash.to_json
+        render json: PostSerializer.new(@post).serializable_hash.to_json
       end
 
       def create

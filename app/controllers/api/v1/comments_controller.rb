@@ -2,7 +2,7 @@ module Api
   module V1
     class CommentsController < ApplicationController
       def index
-        @comments = Comment.all
+        @comments = Comment.where post_id: params[:post_id]
 
         render json: CommentSerializer.new(@comments).serializable_hash.to_json
       end

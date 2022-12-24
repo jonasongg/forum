@@ -1,6 +1,10 @@
 class PostSerializer
   include JSONAPI::Serializer
-  attributes :title, :body, :created_at, :user
+  attributes :title, :body, :created_at
+
+  attribute :user_username do |object|
+    object.user.username
+  end
 
   #If the year of the date the post is created is this year, then omit the year
   #attribute :created_at do |object|

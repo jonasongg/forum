@@ -12,24 +12,29 @@ const Wrapper = styled.div`
     gap: 20px;
 `;
 
-const ContentWrapper = styled.div`
+const PageWrapper = styled.div`
     display: flex;
     margin: 0px 15% 0px 15%;
     gap: 20px;
-    flex-grow: 1;
+`;
+
+const ContentWrapper = styled.div`
+    width: 70%;
 `;
 
 const App: React.FC = () => {
   return (
     <Wrapper>
       <Navbar />
-      <ContentWrapper>
+      <PageWrapper>
         <Sidebar />
-        <Routes>
-          <Route path="/" element={<Home />} />
-          <Route path="/posts/:id" element={<Post />} />
-        </Routes>
-      </ContentWrapper>
+        <ContentWrapper>
+          <Routes>
+            <Route path="/" element={<Home />} />
+            <Route path="/posts/:id" element={<Post />} />
+          </Routes>
+        </ContentWrapper>
+      </PageWrapper>
     </Wrapper>
   );
 };
