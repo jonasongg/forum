@@ -1,10 +1,6 @@
 # This file should contain all the record creation needed to seed the database with its default values.
 # The data can then be loaded with the bin/rails db:seed command (or created alongside the database with db:setup).
 
-User.destroy_all
-Post.destroy_all
-Comment.destroy_all
-
 users = User.create([
   {
       username: "user1"
@@ -42,7 +38,13 @@ comments = Comment.create([
   }
 ])
 
-reply = Comment.create([
+replies = Comment.create([
+  {
+    body: "Maecenas tempor velit et lacinia semper.",
+    user: users.first,
+    post: posts.first,
+    parent: comments.first
+  },
   {
     body: "Aenean sed dignissim erat.",
     user: users.first,
@@ -56,6 +58,6 @@ Comment.create([
     body: "Donec ac scelerisque nulla.",
     user: users.last,
     post: posts.first,
-    parent: reply.first
+    parent: replies.first
   }
 ])

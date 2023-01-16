@@ -17,5 +17,8 @@ export type tComment = {
         created_at: string;
         parent_id: null | number;
         user_username: string;
+        replies: {
+            data: tComment;
+        }[];
     };
 };

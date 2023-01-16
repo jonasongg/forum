@@ -39,12 +39,6 @@ const Divider = styled.hr`
     width: 96%;
 `;
 
-const CommentsWrapper = styled.div`
-    display: flex;
-    flex-direction: column;
-    gap: 20px;
-`;
-
 const NoComments = styled.div`
     display: flex;
     justify-content: center;
@@ -77,17 +71,11 @@ const tPost: React.FC = () => {
   const commentsList = comments.map((comment) => (
     <Comment
       key={comment.attributes.body}
-      body={comment.attributes.body}
-      author={comment.attributes.user_username}
-      date={comment.attributes.created_at}
+      attributes={comment.attributes}
     />
   ));
 
-  // const topLevelComments = comments.filter(
-  //   (comment) => comment.attributes.parent_id == null
-  // );
-
-  // const commentsList = topLevelComments.map((comment) => )
+  //Separate comments based on whether or not it has a parent
 
   return (
     <PostWrapper>
@@ -101,7 +89,7 @@ const tPost: React.FC = () => {
       {comments.length == 0 ? (
         <NoComments>no comments yet</NoComments>
       ) : (
-        <CommentsWrapper>{commentsList}</CommentsWrapper>
+        <div>{commentsList}</div>
       )}
     </PostWrapper>
   );
