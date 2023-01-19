@@ -10,11 +10,12 @@ type CardProps = {
     date: string;
 };
 
-const CardWrapper = styled.div`
+const CardWrapper = styled(Link)`
     display: flex;
     flex-direction: column;
     gap: 5px;
     padding: 20px;
+    text-decoration: none;
 
     :hover {
         background-color: #f9f9f9;
@@ -45,15 +46,13 @@ const CardSubtext = styled.div`
 
 const Card: React.FC<CardProps> = (props: CardProps) => {
   return (
-    <Link to={`/posts/${props.id}`} style={{ textDecoration: 'none' }}>
-      <CardWrapper>
-        <CardTitle>{props.title}</CardTitle>
-        <CardPreview>{props.body}</CardPreview>
-        <CardSubtext>
-                    by {props.author} • {props.date}
-        </CardSubtext>
-      </CardWrapper>
-    </Link>
+    <CardWrapper to={`/posts/${props.id}`}>
+      <CardTitle>{props.title}</CardTitle>
+      <CardPreview>{props.body}</CardPreview>
+      <CardSubtext>
+                by {props.author} • {props.date}
+      </CardSubtext>
+    </CardWrapper>
   );
 };
 

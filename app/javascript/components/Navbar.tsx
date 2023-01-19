@@ -1,6 +1,11 @@
 import React from 'react';
 import styled from 'styled-components';
 import { Link } from 'react-router-dom';
+import { StyledButton } from './StyledButton';
+
+type NavbarProps = {
+    setButton: React.Dispatch<React.SetStateAction<boolean>>;
+};
 
 const Nav = styled.nav`
     display: flex;
@@ -17,17 +22,22 @@ const Nav = styled.nav`
     box-shadow: 0px 0px 2px 1px rgba(0, 0, 0, 0.02);
 `;
 
-const HomeLogo = styled.div`
+const HomeLogo = styled(Link)`
     font-size: 1.5rem;
     font-weight: 600;
     font-family: Poppins;
     color: black;
+    text-decoration: none;
+    :hover {
+        color: black;
+    }
 `;
 
 const AlignRight = styled.div`
     display: flex;
     justify-content: flex-end;
     align-items: center;
+    gap: 20px;
 
     width: 90%;
 `;
@@ -42,35 +52,24 @@ const SearchInput = styled.input`
     outline: none;
     border: 2px solid #f5f5f5;
     border-radius: 10px;
+
     :focus {
         border: 2px solid #e0e0e0;
         width: 80%;
     }
-    transition: border 0.2s, width, 0.5s;
+
+    transition: border 0.2s, width 0.5s;
 `;
 
-const LoginButton = styled.div`
-    width: 10%;
-    text-align: center;
-    color: #050505;
-`;
-
-const SignupButton = styled.div`
-    width: 10%;
-    text-align: center;
-    color: #050505;
-`;
-
-const Navbar: React.FC = () => {
+const Navbar: React.FC<NavbarProps> = (props) => {
   return (
     <Nav>
-      <Link to="/" style={{ textDecoration: 'none' }}>
-        <HomeLogo>forum</HomeLogo>
-      </Link>
+      <HomeLogo to="/">forum</HomeLogo>
       <AlignRight>
         <SearchInput placeholder="Search..." />
-        <SignupButton>Sign up</SignupButton>
-        <LoginButton>Log in</LoginButton>
+        <StyledButton onClick={() => props.setButton(true)}>
+                    LOG IN
+        </StyledButton>
       </AlignRight>
     </Nav>
   );

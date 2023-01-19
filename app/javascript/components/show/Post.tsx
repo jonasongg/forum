@@ -75,8 +75,6 @@ const tPost: React.FC = () => {
     />
   ));
 
-  //Separate comments based on whether or not it has a parent
-
   return (
     <PostWrapper>
       <PostSubtext>

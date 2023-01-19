@@ -1,10 +1,11 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { Routes, Route } from 'react-router-dom';
+import styled from 'styled-components';
 import Home from './index/Home';
 import Post from './show/Post';
 import Navbar from './Navbar';
 import Sidebar from './Sidebar';
-import styled from 'styled-components';
+import Popup from './Popup';
 
 const Wrapper = styled.div`
     display: flex;
@@ -23,19 +24,35 @@ const ContentWrapper = styled.div`
 `;
 
 const App: React.FC = () => {
+  const [buttonClicked, setButtonClicked] = useState(false);
+
+  useEffect(() => {
+    const close = (e: KeyboardEvent) => {
+      if (e.key == 'Escape') {
+        setButtonClicked(false);
+      }
+    };
+
+    window.addEventListener('keydown', close);
+    return () => window.removeEventListener('keydown', close);
+  }, []);
+
   return (
-    <Wrapper>
-      <Navbar />
-      <PageWrapper>
-        <Sidebar />
-        <ContentWrapper>
-          <Routes>
-            <Route path="/" element={<Home />} />
-            <Route path="/posts/:id" element={<Post />} />
-          </Routes>
-        </ContentWrapper>
-      </PageWrapper>
-    </Wrapper>
+    <>
+      {buttonClicked && <Popup setButton={setButtonClicked} />}
+      <Wrapper>
+        <Navbar setButton={setButtonClicked} />
+        <PageWrapper>
+          <Sidebar />
+          <ContentWrapper>
+            <Routes>
+              <Route path="/" element={<Home />} />
+              <Route path="/posts/:id" element={<Post />} />
+            </Routes>
+          </ContentWrapper>
+        </PageWrapper>
+      </Wrapper>
+    </>
   );
 };
 
