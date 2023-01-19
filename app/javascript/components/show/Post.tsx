@@ -2,6 +2,7 @@ import axios from 'axios';
 import React, { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import styled from 'styled-components';
+import axiosInstance from '../../api';
 import { tPost, tComment } from '../types';
 import Comment from './Comment';
 
@@ -54,14 +55,14 @@ const tPost: React.FC = () => {
 
   useEffect(() => {
     axios
-      .get(`http://localhost:3000/api/v1/posts/${params.id}`)
+      .get(`/posts/${params.id}`)
       .then((rsp) => {
         setPost(rsp.data.data);
       })
       .catch(console.log);
 
-    axios
-      .get(`http://localhost:3000/api/v1/posts/${params.id}/comments`)
+    axiosInstance
+      .get(`/posts/${params.id}/comments`)
       .then((rsp) => {
         setComments(rsp.data.data);
       })

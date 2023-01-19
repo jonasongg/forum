@@ -1,8 +1,8 @@
 import React, { useState, useEffect } from 'react';
-import axios from 'axios';
 import styled from 'styled-components';
 import Card from './Card';
 import { tPost } from '../types';
+import axiosInstance from '../../api';
 
 const HomeWrapper = styled.div`
     background-color: white;
@@ -24,8 +24,8 @@ const Home: React.FC = () => {
   const [posts, setPosts] = useState<tPost[]>([]);
 
   useEffect(() => {
-    axios
-      .get('api/v1/posts')
+    axiosInstance
+      .get('/posts')
       .then((rsp) => {
         setPosts(rsp.data.data);
       })

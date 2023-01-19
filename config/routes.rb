@@ -9,6 +9,7 @@ Rails.application.routes.draw do
         resources :comments, only: [:index]
       end
       resources :users, only: [:show]
+      post '/login', to: 'users#login'
     end
   end
 

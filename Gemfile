@@ -47,6 +47,8 @@ gem "bootsnap", require: false
 
 gem 'jsonapi-serializer'
 
+gem 'jwt'
+
 # Use Sass to process CSS
 # gem "sassc-rails"
 

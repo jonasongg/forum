@@ -1,6 +1,8 @@
 module Api
   module V1
     class PostsController < ApplicationController
+      skip_before_action :authenticate_request, only: [:index, :show]
+
       def index
         @posts = Post.order(created_at: :desc)
         
@@ -16,35 +18,36 @@ module Api
       def create
         @post = Post.new(post_params)
 
-        if post.save
+        if @post.save
           render json: PostSerializer.new(@post).serializable_hash.to_json
         else
-          render json: { error: airline.error.messages }, status: :unprocessable_entity
+          render json: { error: @post.error.messages }, status: :unprocessable_entity
         end
       end
 
       def update
         @post = Post.find(params[:id])
 
-        if post.update(post_params)
+        if @post.update(post_params)
           render json: PostSerializer.new(@post).serializable_hash.to_json
         else
-          render json: { error: airline.error.messages }, status: :unprocessable_entity
+          render json: { error: @post.error.messages }, status: :unprocessable_entity
         end
       end
 
       def destroy
         @post = Post.find(params[:id])
 
-        if post.destroy
+        if @post.destroy
           render json: PostSerializer.new(@post).serializable_hash.to_json
         else
-          render json: { error: airline.error.messages }, status: :unprocessable_entity
+          render json: { error: @post.error.messages }, status: :unprocessable_entity
         end
       end
 
+      private
       def post_params
-        params.require(:title, :body)
+        params.permit(:title, :body)
       end
     end
   end

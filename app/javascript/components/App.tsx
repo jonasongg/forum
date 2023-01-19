@@ -6,6 +6,7 @@ import Post from './show/Post';
 import Navbar from './Navbar';
 import Sidebar from './Sidebar';
 import Popup from './Popup';
+import axiosInstance from '../api';
 
 const Wrapper = styled.div`
     display: flex;
@@ -27,6 +28,15 @@ const App: React.FC = () => {
   const [buttonClicked, setButtonClicked] = useState(false);
 
   useEffect(() => {
+    axiosInstance.interceptors.response.use(
+      (response) => response,
+      (error) => {
+        if (error.response.status === 401) {
+          setButtonClicked(true);
+        }
+      }
+    );
+
     const close = (e: KeyboardEvent) => {
       if (e.key == 'Escape') {
         setButtonClicked(false);
