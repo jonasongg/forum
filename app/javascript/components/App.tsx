@@ -6,7 +6,6 @@ import Post from './show/Post';
 import Navbar from './Navbar';
 import Sidebar from './Sidebar';
 import Popup from './Popup';
-import axiosInstance from '../api';
 
 const Wrapper = styled.div`
     display: flex;
@@ -24,22 +23,41 @@ const ContentWrapper = styled.div`
     width: 70%;
 `;
 
+import axios from 'axios';
+
+const axiosInstance = axios.create({
+  baseURL: 'http://localhost:3000/api/v1',
+});
+
+axiosInstance.interceptors.request.use(
+  (config) => {
+    const token = sessionStorage.getItem('token');
+    config.headers = config.headers ?? {};
+    config.headers['Authorization'] = `Bearer ${token}`;
+
+    return config;
+  },
+  (error) => {
+    return Promise.reject(error);
+  }
+);
+
 const App: React.FC = () => {
-  const [buttonClicked, setButtonClicked] = useState(false);
+  const [loginPrompted, setLoginPrompted] = useState(false);
 
   useEffect(() => {
     axiosInstance.interceptors.response.use(
-      (response) => response,
+      (rsp) => rsp,
       (error) => {
         if (error.response.status === 401) {
-          setButtonClicked(true);
+          setLoginPrompted(true);
         }
       }
     );
 
     const close = (e: KeyboardEvent) => {
       if (e.key == 'Escape') {
-        setButtonClicked(false);
+        setLoginPrompted(false);
       }
     };
 
@@ -49,9 +67,9 @@ const App: React.FC = () => {
 
   return (
     <>
-      {buttonClicked && <Popup setButton={setButtonClicked} />}
+      {loginPrompted && <Popup setLoginPrompted={setLoginPrompted} />}
       <Wrapper>
-        <Navbar setButton={setButtonClicked} />
+        <Navbar setButton={setLoginPrompted} />
         <PageWrapper>
           <Sidebar />
           <ContentWrapper>
@@ -66,4 +84,5 @@ const App: React.FC = () => {
   );
 };
 
+export { axiosInstance };
 export default App;

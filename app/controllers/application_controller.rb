@@ -1,6 +1,6 @@
 class ApplicationController < ActionController::Base
   include JwtToken
-
+  protect_from_forgery with: :null_session
   before_action :authenticate_request
 
   def authenticate_request

@@ -1,9 +1,10 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import styled from 'styled-components';
+import { axiosInstance } from './App';
 import { StyledButton } from './StyledButton';
 
 type PopupProps = {
-    setButton: React.Dispatch<React.SetStateAction<boolean>>;
+    setLoginPrompted: React.Dispatch<React.SetStateAction<boolean>>;
 };
 
 const PopupWrapper = styled.div`
@@ -82,18 +83,36 @@ const ProceedButton = styled(StyledButton)`
 
 const Popup: React.FC<PopupProps> = (props) => {
   const [error, setError] = useState(false);
+  const [valid, setValid] = useState(true);
+  const [input, setInput] = useState('');
 
-  const handleInvalid = (event: React.FormEvent<HTMLInputElement>) => {
-    event.preventDefault();
-    setError(true);
+  const handleChange = (event: React.FormEvent<HTMLInputElement>) => {
+    setInput((event.target as HTMLInputElement).value);
   };
+
+  useEffect(() => {
+    setValid(/[A-z0-9À-ž]{5,}/.test(input));
+    if (valid && error) {
+      setError(false);
+    }
+  }, [input]);
 
   const handleProceed = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
+    if (!valid) {
+      setError(true);
+    } else {
+      axiosInstance
+        .post('/login', { username: input })
+        .then((rsp) => {
+          sessionStorage.setItem('token', rsp.data.token);
+        })
+        .catch(console.log);
+    }
   };
 
   return (
-    <PopupWrapper onClick={() => props.setButton(false)}>
+    <PopupWrapper onClick={() => props.setLoginPrompted(false)}>
       <PopupInner onClick={(e) => e.stopPropagation()}>
         <PopupTitle>Log in</PopupTitle>
         <div>
@@ -105,10 +124,7 @@ const Popup: React.FC<PopupProps> = (props) => {
             placeholder="username"
             type="text"
             name="username"
-            pattern="[A-z0-9À-ž]{5,}"
-            required
-            onInvalid={() => handleInvalid}
-            onChange={() => setError(false)}
+            onChange={handleChange}
             error={error}
           />
           {error && (
@@ -119,7 +135,9 @@ const Popup: React.FC<PopupProps> = (props) => {
           )}
           <ButtonsWrapper>
             <ProceedButton type="submit">PROCEED</ProceedButton>
-            <StyledButton onClick={() => props.setButton(false)}>
+            <StyledButton
+              onClick={() => props.setLoginPrompted(false)}
+            >
                             CANCEL
             </StyledButton>
           </ButtonsWrapper>

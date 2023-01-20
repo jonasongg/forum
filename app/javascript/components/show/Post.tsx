@@ -1,8 +1,7 @@
-import axios from 'axios';
 import React, { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import styled from 'styled-components';
-import axiosInstance from '../../api';
+import { axiosInstance } from '../App';
 import { tPost, tComment } from '../types';
 import Comment from './Comment';
 
@@ -54,7 +53,7 @@ const tPost: React.FC = () => {
   const params = useParams();
 
   useEffect(() => {
-    axios
+    axiosInstance
       .get(`/posts/${params.id}`)
       .then((rsp) => {
         setPost(rsp.data.data);

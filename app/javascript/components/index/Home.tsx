@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import styled from 'styled-components';
 import Card from './Card';
 import { tPost } from '../types';
-import axiosInstance from '../../api';
+import { axiosInstance } from '../App';
 
 const HomeWrapper = styled.div`
     background-color: white;

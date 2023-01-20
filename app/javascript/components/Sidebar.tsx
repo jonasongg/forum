@@ -1,5 +1,6 @@
 import React from 'react';
 import styled from 'styled-components';
+import { axiosInstance } from './App';
 
 const Side = styled.aside`
     display: flex;
@@ -15,7 +16,7 @@ const Side = styled.aside`
     box-shadow: 0px 0px 2px 1px rgba(0, 0, 0, 0.02);
 `;
 
-const CreateButton = styled.div`
+const CreateButton = styled.button`
     width: 75%;
     margin-top: 12%;
     background: #404040
@@ -31,10 +32,19 @@ const CreateButton = styled.div`
     }
 `;
 
-const Sidebar = () => {
+const Sidebar: React.FC = () => {
+  const handlePost = () => {
+    // axiosInstance
+    //   .post('/posts')
+    //   .then((response) => console.log(response))
+    //   .catch(console.log);
+  };
+
   return (
     <Side>
-      <CreateButton>Create a new post</CreateButton>
+      <CreateButton onClick={() => handlePost()}>
+                Create a new post
+      </CreateButton>
     </Side>
   );
 };
