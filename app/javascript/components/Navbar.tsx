@@ -1,7 +1,7 @@
-import React from 'react';
+import React, { useContext } from 'react';
 import styled from 'styled-components';
 import { Link } from 'react-router-dom';
-import { StyledButton } from './StyledButton';
+import { AuthContext } from './AuthContext';
 
 type NavbarProps = {
     setButton: React.Dispatch<React.SetStateAction<boolean>>;
@@ -62,14 +62,23 @@ const SearchInput = styled.input`
 `;
 
 const Navbar: React.FC<NavbarProps> = (props) => {
+  const auth = useContext(AuthContext);
   return (
     <Nav>
       <HomeLogo to="/">forum</HomeLogo>
       <AlignRight>
         <SearchInput placeholder="Search..." />
-        <StyledButton onClick={() => props.setButton(true)}>
-                    LOG IN
-        </StyledButton>
+        {auth.user ? (
+        //When user is NOT null (a user is logged in)
+          <button onClick={() => auth.logout()}>
+            {auth.user.attributes.username}
+          </button>
+        ) : (
+        //When user IS null (not logged in)
+          <button onClick={() => props.setButton(true)}>
+                        LOG IN
+          </button>
+        )}
       </AlignRight>
     </Nav>
   );

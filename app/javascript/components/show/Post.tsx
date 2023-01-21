@@ -48,7 +48,7 @@ const NoComments = styled.div`
 `;
 
 const tPost: React.FC = () => {
-  const [post, setPost] = useState<tPost>();
+  const [post, setPost] = useState<tPost | null>(null);
   const [comments, setComments] = useState<tComment[]>([]);
   const params = useParams();
 

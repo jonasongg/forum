@@ -6,6 +6,8 @@ import Post from './show/Post';
 import Navbar from './Navbar';
 import Sidebar from './Sidebar';
 import Popup from './Popup';
+import axios from 'axios';
+import { AuthProvider } from './AuthContext';
 
 const Wrapper = styled.div`
     display: flex;
@@ -23,15 +25,14 @@ const ContentWrapper = styled.div`
     width: 70%;
 `;
 
-import axios from 'axios';
-
+//Create (and export) axios instance to add interceptors in case of any actions that require authorisation
 const axiosInstance = axios.create({
   baseURL: 'http://localhost:3000/api/v1',
 });
 
 axiosInstance.interceptors.request.use(
   (config) => {
-    const token = sessionStorage.getItem('token');
+    const token = localStorage.getItem('token');
     config.headers = config.headers ?? {};
     config.headers['Authorization'] = `Bearer ${token}`;
 
@@ -42,9 +43,12 @@ axiosInstance.interceptors.request.use(
   }
 );
 
+export { axiosInstance };
+
 const App: React.FC = () => {
   const [loginPrompted, setLoginPrompted] = useState(false);
 
+  //Add interceptor to handle unauthorised error by opening login prompt
   useEffect(() => {
     axiosInstance.interceptors.response.use(
       (rsp) => rsp,
@@ -54,7 +58,10 @@ const App: React.FC = () => {
         }
       }
     );
+  }, []);
 
+  //Close login prompt on Esc key
+  useEffect(() => {
     const close = (e: KeyboardEvent) => {
       if (e.key == 'Escape') {
         setLoginPrompted(false);
@@ -66,7 +73,7 @@ const App: React.FC = () => {
   }, []);
 
   return (
-    <>
+    <AuthProvider>
       {loginPrompted && <Popup setLoginPrompted={setLoginPrompted} />}
       <Wrapper>
         <Navbar setButton={setLoginPrompted} />
@@ -80,9 +87,8 @@ const App: React.FC = () => {
           </ContentWrapper>
         </PageWrapper>
       </Wrapper>
-    </>
+    </AuthProvider>
   );
 };
 
-export { axiosInstance };
 export default App;

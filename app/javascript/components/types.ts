@@ -22,3 +22,16 @@ export type tComment = {
         }[];
     };
 };
+
+export type tUser = {
+    id: number;
+    type: string;
+    attributes: {
+        username: string;
+    };
+};
+
+export type tToken = {
+    exp: number;
+    user_id: number;
+};

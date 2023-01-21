@@ -1,7 +1,6 @@
-import React, { useEffect, useState } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import styled from 'styled-components';
-import { axiosInstance } from './App';
-import { StyledButton } from './StyledButton';
+import { AuthContext } from './AuthContext';
 
 type PopupProps = {
     setLoginPrompted: React.Dispatch<React.SetStateAction<boolean>>;
@@ -71,7 +70,7 @@ const ButtonsWrapper = styled.div`
     margin: 20px -10px -20px 0px;
 `;
 
-const ProceedButton = styled(StyledButton)`
+const ProceedButton = styled.button`
     color: #f5f5f5;
     background-color: #404040;
 
@@ -85,11 +84,13 @@ const Popup: React.FC<PopupProps> = (props) => {
   const [error, setError] = useState(false);
   const [valid, setValid] = useState(true);
   const [input, setInput] = useState('');
+  const auth = useContext(AuthContext);
 
   const handleChange = (event: React.FormEvent<HTMLInputElement>) => {
     setInput((event.target as HTMLInputElement).value);
   };
 
+  //Error when user tries submitting invalid username but cleared as soon as it becomes valid
   useEffect(() => {
     setValid(/[A-z0-9À-ž]{5,}/.test(input));
     if (valid && error) {
@@ -97,17 +98,13 @@ const Popup: React.FC<PopupProps> = (props) => {
     }
   }, [input]);
 
-  const handleProceed = (event: React.FormEvent<HTMLFormElement>) => {
+  const handleProceed = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     if (!valid) {
       setError(true);
     } else {
-      axiosInstance
-        .post('/login', { username: input })
-        .then((rsp) => {
-          sessionStorage.setItem('token', rsp.data.token);
-        })
-        .catch(console.log);
+      auth.login(input);
+      props.setLoginPrompted(false);
     }
   };
 
@@ -135,11 +132,9 @@ const Popup: React.FC<PopupProps> = (props) => {
           )}
           <ButtonsWrapper>
             <ProceedButton type="submit">PROCEED</ProceedButton>
-            <StyledButton
-              onClick={() => props.setLoginPrompted(false)}
-            >
+            <button onClick={() => props.setLoginPrompted(false)}>
                             CANCEL
-            </StyledButton>
+            </button>
           </ButtonsWrapper>
         </form>
       </PopupInner>
