@@ -5,13 +5,13 @@ import { tPost } from '../types';
 import { axiosInstance } from '../App';
 
 const HomeWrapper = styled.div`
-    background-color: white;
+    background-color: ${(props) => props.theme.background};
     border-radius: 10px;
     box-shadow: 0px 0px 2px 1px rgba(0, 0, 0, 0.02);
 `;
 
 const Divider = styled.hr`
-    border-top: 1px solid gray;
+    border-top: 1px solid ${(props) => props.theme.subText};
     margin: 0px 0px 0px 2%;
     width: 96%;
 

@@ -23,7 +23,7 @@ const PopupWrapper = styled.div`
 const PopupInner = styled.div`
     padding: 70px;
     z-index: 2;
-    background-color: white;
+    background-color: ${(props) => props.theme.background};
     border-radius: 20px;
     width: 40%;
 
@@ -42,15 +42,17 @@ const UsernameInput = styled.input<{ error: boolean }>`
     height: 40px;
     border: none;
     outline: none;
-    border-bottom: 2px solid ${(props) => (props.error ? '#fdeeee' : '#f5f5f5')};
+    border-bottom: 2px solid
+        ${(props) => (props.error ? props.theme.error : props.theme.main)};
     margin-top: 10px;
     :focus {
         border: none;
         border-bottom: 2px solid
-            ${(props) => (props.error ? '#f59a9a' : '#e0e0e0')};
+            ${(props) =>
+    props.error ? props.theme.subError : props.theme.subMain};
     }
     :focus::placeholder {
-        color: #e0e0e0;
+        color: ${(props) => props.theme.subMain};
         transition: color 0.1s;
     }
 
@@ -71,12 +73,12 @@ const ButtonsWrapper = styled.div`
 `;
 
 const ProceedButton = styled.button`
-    color: #f5f5f5;
-    background-color: #404040;
+    color: ${(props) => props.theme.main};
+    background-color: ${(props) => props.theme.dark};
 
     :hover,
     :active {
-        background-color: #282828;
+        background-color: ${(props) => props.theme.darkContrast};
     }
 `;
 

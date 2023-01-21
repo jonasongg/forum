@@ -2,7 +2,7 @@ import { createGlobalStyle } from 'styled-components';
 
 const GlobalStyle = createGlobalStyle`
   body {
-    background-color: #f5f5f5;
+    background-color: ${(props) => props.theme.main};
     font-family: Roboto;
   }
 
@@ -16,16 +16,16 @@ const GlobalStyle = createGlobalStyle`
 
     height: 40px;
     padding: 15px;
-    color: #050505;
+    color: ${(props) => props.theme.text};
     border: none;
     border-radius: 10px;
-    background-color: white;
+    background-color: ${(props) => props.theme.background};
 
     :hover {
-        background-color: #f5f5f5;
+        background-color: ${(props) => props.theme.main};
     }
     :active {
-        background-color: #e0e0e0;
+        background-color: ${(props) => props.theme.subMain};
     }
 
     transition: background-color 0.2s;

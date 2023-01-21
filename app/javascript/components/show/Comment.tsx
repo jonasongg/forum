@@ -19,13 +19,13 @@ const CommentWrapper = styled.div`
 `;
 
 const CommentSubtext = styled.div`
-    color: gray;
+    color: ${(props) => props.theme.subText};
     font-weight: 400;
     font-size: small;
 `;
 
 const CommentActions = styled.div`
-    color: gray;
+    color: ${(props) => props.theme.subText};
     font-weight: 600;
     font-size: small;
 `;

@@ -10,14 +10,14 @@ const PostWrapper = styled.div`
     flex-direction: column;
     gap: 10px;
 
-    background-color: white;
+    background-color: ${(props) => props.theme.background};
     border-radius: 10px;
     box-shadow: 0px 0px 2px 1px rgba(0, 0, 0, 0.02);
     padding: 20px 20px 15px 20px;
 `;
 
 const PostSubtext = styled.div`
-    color: gray;
+    color: ${(props) => props.theme.subText};
     font-weight: 400;
     font-size: small;
 `;
@@ -34,7 +34,7 @@ const PostBody = styled.div`
 `;
 
 const Divider = styled.hr`
-    border-top: 1px solid gray;
+    border-top: 1px solid ${(props) => props.theme.subText};
     margin: 0px 0px 0px 2%;
     width: 96%;
 `;
@@ -42,7 +42,7 @@ const Divider = styled.hr`
 const NoComments = styled.div`
     display: flex;
     justify-content: center;
-    color: gray;
+    color: ${(props) => props.theme.subText};
     font-size: small;
     margin-bottom: -5px;
 `;

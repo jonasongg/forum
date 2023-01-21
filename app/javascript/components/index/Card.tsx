@@ -18,7 +18,7 @@ const CardWrapper = styled(Link)`
     text-decoration: none;
 
     :hover {
-        background-color: #f9f9f9;
+        background-color: ${(props) => props.theme.main};
     }
 `;
 
@@ -38,7 +38,7 @@ const CardPreview = styled.div`
 `;
 
 const CardSubtext = styled.div`
-    color: gray;
+    color: ${(props) => props.theme.subText};
     font-weight: 400;
     font-size: small;
     margin-bottom: -5px;
