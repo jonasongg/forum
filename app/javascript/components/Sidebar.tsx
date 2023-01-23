@@ -12,7 +12,7 @@ const Side = styled.aside`
     height: 100%;
     background-color: ${(props) => props.theme.background};
     border-radius: 10px;
-    box-shadow: 0px 0px 2px 1px rgba(0, 0, 0, 0.02);
+    box-shadow: ${(props) => props.theme.boxShadow};
 `;
 
 const CreateButton = styled.button`
@@ -28,7 +28,7 @@ const CreateButton = styled.button`
     padding: 8px 20px 8px 45px;
     color: white;
 
-    box-shadow: 0px 0px 2px 1px rgba(0, 0, 0, 0.08);
+    box-shadow: ${(props) => props.theme.boxShadowStrong};
     :hover {
         background-color: ${(props) => props.theme.darkContrast};
     }

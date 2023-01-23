@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useContext, useEffect } from 'react';
 import { Routes, Route } from 'react-router-dom';
 import styled from 'styled-components';
 import Home from './index/Home';
@@ -6,8 +6,8 @@ import Post from './show/Post';
 import Navbar from './Navbar';
 import Sidebar from './Sidebar';
 import Popup from './Popup';
-import axios from 'axios';
-import { AuthProvider } from './AuthContext';
+import { AuthContext } from './AuthContext';
+import { axiosInstance } from './api';
 
 const Wrapper = styled.div`
     display: flex;
@@ -25,28 +25,8 @@ const ContentWrapper = styled.div`
     width: 70%;
 `;
 
-//Create (and export) axios instance to add interceptors in case of any actions that require authorisation
-const axiosInstance = axios.create({
-  baseURL: 'http://localhost:3000/api/v1',
-});
-
-axiosInstance.interceptors.request.use(
-  (config) => {
-    const token = localStorage.getItem('token');
-    config.headers = config.headers ?? {};
-    config.headers['Authorization'] = `Bearer ${token}`;
-
-    return config;
-  },
-  (error) => {
-    return Promise.reject(error);
-  }
-);
-
-export { axiosInstance };
-
 const App: React.FC = () => {
-  const [loginPrompted, setLoginPrompted] = useState(false);
+  const auth = useContext(AuthContext);
 
   //Add interceptor to handle unauthorised error by opening login prompt
   useEffect(() => {
@@ -54,29 +34,17 @@ const App: React.FC = () => {
       (rsp) => rsp,
       (error) => {
         if (error.response.status === 401) {
-          setLoginPrompted(true);
+          auth.setLoginPrompted(true);
         }
       }
     );
   }, []);
 
-  //Close login prompt on Esc key
-  useEffect(() => {
-    const close = (e: KeyboardEvent) => {
-      if (e.key == 'Escape') {
-        setLoginPrompted(false);
-      }
-    };
-
-    window.addEventListener('keydown', close);
-    return () => window.removeEventListener('keydown', close);
-  }, []);
-
   return (
-    <AuthProvider>
-      {loginPrompted && <Popup setLoginPrompted={setLoginPrompted} />}
+    <>
+      {auth.loginPrompted && <Popup />}
       <Wrapper>
-        <Navbar setButton={setLoginPrompted} />
+        <Navbar />
         <PageWrapper>
           <Sidebar />
           <ContentWrapper>
@@ -87,7 +55,7 @@ const App: React.FC = () => {
           </ContentWrapper>
         </PageWrapper>
       </Wrapper>
-    </AuthProvider>
+    </>
   );
 };
 

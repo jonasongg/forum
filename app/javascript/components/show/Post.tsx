@@ -1,18 +1,20 @@
+/* eslint-disable @typescript-eslint/no-empty-function */
 import React, { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import styled from 'styled-components';
-import { axiosInstance } from '../App';
+import { axiosInstance } from '../api';
 import { tPost, tComment } from '../types';
 import Comment from './Comment';
+import CommentForm from './CommentForm';
 
 const PostWrapper = styled.div`
     display: flex;
     flex-direction: column;
-    gap: 10px;
+    gap: 20px;
 
     background-color: ${(props) => props.theme.background};
     border-radius: 10px;
-    box-shadow: 0px 0px 2px 1px rgba(0, 0, 0, 0.02);
+    box-shadow: ${(props) => props.theme.boxShadow};
     padding: 20px 20px 15px 20px;
 `;
 
@@ -26,6 +28,7 @@ const PostTitle = styled.div`
     color: black;
     font-weight: 600;
     font-size: larger;
+    margin: -10px 0px -10px 0px;
 `;
 
 const PostBody = styled.div`
@@ -33,8 +36,8 @@ const PostBody = styled.div`
     font-size: medium;
 `;
 
-const Divider = styled.hr`
-    border-top: 1px solid ${(props) => props.theme.subText};
+const Divider = styled.div`
+    border-top: 1px solid ${(props) => props.theme.subMain};
     margin: 0px 0px 0px 2%;
     width: 96%;
 `;
@@ -44,11 +47,11 @@ const NoComments = styled.div`
     justify-content: center;
     color: ${(props) => props.theme.subText};
     font-size: small;
-    margin-bottom: -5px;
+    //margin-bottom: -5px;
 `;
 
 const tPost: React.FC = () => {
-  const [post, setPost] = useState<tPost | null>(null);
+  const [post, setPost] = useState<tPost>();
   const [comments, setComments] = useState<tComment[]>([]);
   const params = useParams();
 
@@ -66,11 +69,12 @@ const tPost: React.FC = () => {
         setComments(rsp.data.data);
       })
       .catch(console.log);
-  }, []);
+  }, [post, comments]);
 
   const commentsList = comments.map((comment) => (
     <Comment
-      key={comment.attributes.body}
+      key={comment.id}
+      id={comment.id}
       attributes={comment.attributes}
     />
   ));
@@ -84,10 +88,14 @@ const tPost: React.FC = () => {
       <PostTitle>{post?.attributes.title}</PostTitle>
       <PostBody>{post?.attributes.body}</PostBody>
       <Divider />
+      <CommentForm
+        parentId={-1}
+        postURL={`/posts/${params.id}/comments`}
+      />
       {comments.length == 0 ? (
         <NoComments>no comments yet</NoComments>
       ) : (
-        <div>{commentsList}</div>
+        <>{commentsList}</>
       )}
     </PostWrapper>
   );

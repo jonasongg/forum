@@ -13,4 +13,6 @@ export const theme: DefaultTheme = {
   errorText: 'red',
   dark: '#404040',
   darkContrast: '#282828',
+  boxShadow: '0px 0px 2px 1px rgba(0, 0, 0, 0.02)',
+  boxShadowStrong: '0px 0px 2px 1px rgba(0, 0, 0, 0.08)',
 };

@@ -3,10 +3,6 @@ import styled from 'styled-components';
 import { Link } from 'react-router-dom';
 import { AuthContext } from './AuthContext';
 
-type NavbarProps = {
-    setButton: React.Dispatch<React.SetStateAction<boolean>>;
-};
-
 const Nav = styled.nav`
     display: flex;
     justify-content: space-between;
@@ -19,7 +15,7 @@ const Nav = styled.nav`
     padding-right: 15%;
     background-color: ${(props) => props.theme.background};
     border-radius: 10px;
-    box-shadow: 0px 0px 2px 1px rgba(0, 0, 0, 0.02);
+    box-shadow: ${(props) => props.theme.boxShadow};
 `;
 
 const HomeLogo = styled(Link)`
@@ -61,7 +57,7 @@ const SearchInput = styled.input`
     transition: border 0.2s, width 0.5s;
 `;
 
-const Navbar: React.FC<NavbarProps> = (props) => {
+const Navbar: React.FC = () => {
   const auth = useContext(AuthContext);
   return (
     <Nav>
@@ -75,7 +71,7 @@ const Navbar: React.FC<NavbarProps> = (props) => {
           </button>
         ) : (
         //When user IS null (not logged in)
-          <button onClick={() => props.setButton(true)}>
+          <button onClick={() => auth.setLoginPrompted(true)}>
                         LOG IN
           </button>
         )}

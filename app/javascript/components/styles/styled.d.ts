@@ -14,5 +14,7 @@ declare module 'styled-components' {
         errorText: string;
         dark: string;
         darkContrast: string;
+        boxShadow: string;
+        boxShadowStrong: string;
     }
 }

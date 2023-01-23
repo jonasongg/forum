@@ -1,10 +1,7 @@
 import React, { useContext, useEffect, useState } from 'react';
 import styled from 'styled-components';
 import { AuthContext } from './AuthContext';
-
-type PopupProps = {
-    setLoginPrompted: React.Dispatch<React.SetStateAction<boolean>>;
-};
+import { StyledConfirmButton } from './styles/StyledConfirmButton';
 
 const PopupWrapper = styled.div`
     display: flex;
@@ -72,17 +69,7 @@ const ButtonsWrapper = styled.div`
     margin: 20px -10px -20px 0px;
 `;
 
-const ProceedButton = styled.button`
-    color: ${(props) => props.theme.main};
-    background-color: ${(props) => props.theme.dark};
-
-    :hover,
-    :active {
-        background-color: ${(props) => props.theme.darkContrast};
-    }
-`;
-
-const Popup: React.FC<PopupProps> = (props) => {
+const Popup: React.FC = () => {
   const [error, setError] = useState(false);
   const [valid, setValid] = useState(true);
   const [input, setInput] = useState('');
@@ -100,18 +87,30 @@ const Popup: React.FC<PopupProps> = (props) => {
     }
   }, [input]);
 
+  //Close login prompt on Esc key
+  useEffect(() => {
+    const close = (e: KeyboardEvent) => {
+      if (e.key == 'Escape') {
+        auth.setLoginPrompted(false);
+      }
+    };
+
+    window.addEventListener('keydown', close);
+    return () => window.removeEventListener('keydown', close);
+  }, []);
+
   const handleProceed = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     if (!valid) {
       setError(true);
     } else {
       auth.login(input);
-      props.setLoginPrompted(false);
+      auth.setLoginPrompted(false);
     }
   };
 
   return (
-    <PopupWrapper onClick={() => props.setLoginPrompted(false)}>
+    <PopupWrapper onClick={() => auth.setLoginPrompted(false)}>
       <PopupInner onClick={(e) => e.stopPropagation()}>
         <PopupTitle>Log in</PopupTitle>
         <div>
@@ -133,8 +132,10 @@ const Popup: React.FC<PopupProps> = (props) => {
             </ErrorMessage>
           )}
           <ButtonsWrapper>
-            <ProceedButton type="submit">PROCEED</ProceedButton>
-            <button onClick={() => props.setLoginPrompted(false)}>
+            <StyledConfirmButton type="submit">
+                            PROCEED
+            </StyledConfirmButton>
+            <button onClick={() => auth.setLoginPrompted(false)}>
                             CANCEL
             </button>
           </ButtonsWrapper>
