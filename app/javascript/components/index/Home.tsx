@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import styled from 'styled-components';
 import Card from './Card';
 import { tPost } from '../types';
-import { axiosInstance } from '../App';
+import { apiGetAllPosts } from '../api';
 
 const HomeWrapper = styled.div`
     background-color: ${(props) => props.theme.background};
@@ -24,13 +24,10 @@ const Home: React.FC = () => {
   const [posts, setPosts] = useState<tPost[]>([]);
 
   useEffect(() => {
-    axiosInstance
-      .get('/posts')
-      .then((rsp) => {
-        setPosts(rsp.data.data);
-      })
-      .catch(console.log);
-  }, [posts.length]); //Only call API again when posts change (change since posts can be edited)
+    (async () => {
+      setPosts((await apiGetAllPosts()).data.data);
+    })();
+  }, []);
 
   const postsList = posts.map((post) => (
     <>

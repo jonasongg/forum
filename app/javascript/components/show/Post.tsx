@@ -2,7 +2,7 @@
 import React, { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import styled from 'styled-components';
-import { axiosInstance } from '../api';
+import { apiGetPost, apiGetPostComments } from '../api';
 import { tPost, tComment } from '../types';
 import Comment from './Comment';
 import CommentForm from './CommentForm';
@@ -55,27 +55,27 @@ const tPost: React.FC = () => {
   const [comments, setComments] = useState<tComment[]>([]);
   const params = useParams();
 
-  useEffect(() => {
-    axiosInstance
-      .get(`/posts/${params.id}`)
-      .then((rsp) => {
-        setPost(rsp.data.data);
-      })
-      .catch(console.log);
+  const fetchPost = async () => {
+    setPost((await apiGetPost(params.id)).data.data);
+  };
 
-    axiosInstance
-      .get(`/posts/${params.id}/comments`)
-      .then((rsp) => {
-        setComments(rsp.data.data);
-      })
-      .catch(console.log);
-  }, [post, comments]);
+  const fetchComments = async () => {
+    const data = (await apiGetPostComments(params.id)).data.data;
+    console.log(data);
+    setComments(data);
+  };
+
+  useEffect(() => {
+    fetchPost();
+    fetchComments();
+  }, []);
 
   const commentsList = comments.map((comment) => (
     <Comment
       key={comment.id}
       id={comment.id}
       attributes={comment.attributes}
+      fetchComments={fetchComments}
     />
   ));
 
@@ -91,6 +91,7 @@ const tPost: React.FC = () => {
       <CommentForm
         parentId={-1}
         postURL={`/posts/${params.id}/comments`}
+        fetchComments={fetchComments}
       />
       {comments.length == 0 ? (
         <NoComments>no comments yet</NoComments>

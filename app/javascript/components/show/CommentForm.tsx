@@ -1,14 +1,16 @@
-import React, { useContext, useState } from 'react';
+import React, { useContext, useRef, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import styled from 'styled-components';
-import { axiosInstance } from '../api';
+import { apiPostComment } from '../api';
 import { AuthContext } from '../AuthContext';
 import { StyledConfirmButton } from '../styles/StyledConfirmButton';
+import { tUser } from '../types';
 
 type CommentFormProps = {
     parentId: number;
     setIsReplying?: React.Dispatch<React.SetStateAction<boolean>>;
     postURL: string;
+    fetchComments: () => Promise<void>;
 };
 
 const NewCommentForm = styled.form`
@@ -54,6 +56,8 @@ const CommentForm: React.FC<CommentFormProps> = (props) => {
   const [input, setInput] = useState('');
   const [focus, setFocus] = useState(false);
   const [error, setError] = useState(false);
+
+  const textAreaRef = useRef<HTMLTextAreaElement>(null);
   const auth = useContext(AuthContext);
   const params = useParams();
 
@@ -67,30 +71,43 @@ const CommentForm: React.FC<CommentFormProps> = (props) => {
   };
 
   const handleBlur = () => {
-    setFocus(input.length != 0);
+    setFocus(input.length != 0); //Unfocus only if length is 0
     setError(false);
   };
 
   const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
-    setFocus(true);
+    setFocus(true); //Prevents the button from disappearing
 
     if (input.length == 0) {
       setError(true);
     } else {
-      auth.setAfterLogin(() => {
-        axiosInstance.post(props.postURL, {
-          body: input,
-          user_id: auth.user?.id,
-          post_id: Number(params.id),
-          ...(props.parentId > 0 && { parent_id: props.parentId }),
-        });
-      });
+      auth.promptLogin(postComment); //Set postComment to be the afterLogin function to be called
     }
   };
 
-  const handleCancel = (event: React.FormEvent<HTMLFormElement>) => {
-    event.preventDefault();
+  const postComment = async (user: tUser) => {
+    await apiPostComment(props.postURL, {
+      body: input,
+      user_id: user.id,
+      post_id: Number(params.id),
+      ...(props.parentId > 0 && { parent_id: props.parentId }), //Only include this if it's a reply
+    });
+
+    if (textAreaRef.current) {
+      //Blur and empty textArea
+      textAreaRef.current.value = '';
+      textAreaRef.current.blur();
+      setInput('');
+      setFocus(false);
+    }
+
+    props.fetchComments(); //Update list of comments
+
+    if (props.parentId > 0 && props.setIsReplying) {
+      //If it's a reply, get rid of textarea
+      props.setIsReplying(false);
+    }
   };
 
   return (
@@ -99,6 +116,7 @@ const CommentForm: React.FC<CommentFormProps> = (props) => {
         placeholder={`Write a ${
           props.parentId > 0 ? 'reply' : 'comment'
         }...`}
+        ref={textAreaRef}
         onFocus={() => setFocus(true)}
         onBlur={() => handleBlur()} //Set unfocused only when length is 0 (textarea empty)
         onChange={handleChange}

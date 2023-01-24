@@ -7,6 +7,7 @@ import CommentForm from './CommentForm';
 type CommentProps = {
     id: number;
     attributes: tComment['attributes'];
+    fetchComments: () => Promise<void>;
 };
 
 const CommentsWrapper = styled.div`
@@ -94,7 +95,8 @@ const Comment: React.FC<CommentProps> = (props: CommentProps) => {
                 <CommentForm
                   parentId={props.id}
                   setIsReplying={setIsReplying}
-                  postURL={`/posts/${params.id}/comments/${props.id}`}
+                  postURL={`/posts/${params.id}/comments`}
+                  fetchComments={props.fetchComments}
                 />
               </PaddedCommentForm>
             )}
@@ -105,6 +107,7 @@ const Comment: React.FC<CommentProps> = (props: CommentProps) => {
                     key={reply.data.attributes.body}
                     id={reply.data.id}
                     attributes={reply.data.attributes}
+                    fetchComments={props.fetchComments}
                   />
                 ))}
               </Replies>
