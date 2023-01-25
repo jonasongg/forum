@@ -1,7 +1,7 @@
 import jwtDecode from 'jwt-decode';
 import React, { createContext, useEffect, useState } from 'react';
-import { apiGetUser, apiPostLogin } from './api';
-import { tToken, tUser } from './types';
+import { apiGetUser, apiPostLogin } from '../api';
+import { tToken, tUser } from '../types';
 
 type tAuthContext = {
     user: tUser | null;
@@ -62,7 +62,6 @@ const AuthProvider: React.FC<AuthProviderProps> = (props) => {
     };
 
     const promptLogin = (afterLoginValue: (user: tUser) => void) => {
-      console.log(user);
       if (!user) {
         setLoginPrompted(true);
         setAfterLogin(() => afterLoginValue);

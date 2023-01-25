@@ -2,7 +2,7 @@ import React, { useContext, useState } from 'react';
 import { redirect, useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
 import { apiPostPost } from '../api';
-import { AuthContext } from '../AuthContext';
+import { AuthContext } from '../authentication/AuthContext';
 import CustomTextArea from '../CustomTextArea';
 import { BasicWrapper } from '../styles/BasicWrapper';
 import { PostCommentButton } from '../styles/StyledButtons';

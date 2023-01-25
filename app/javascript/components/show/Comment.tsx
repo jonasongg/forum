@@ -1,7 +1,8 @@
 import React, { useContext, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import styled from 'styled-components';
-import { AuthContext } from '../AuthContext';
+import { AuthContext } from '../authentication/AuthContext';
+import Dropdown from '../Dropdown';
 import { PostCommentActions } from '../styles/PostCommentActions';
 import { tComment } from '../types';
 import AuthorisedActions from './AuthorisedActions';
@@ -65,12 +66,21 @@ const Replies = styled.div`
 
 const Comment: React.FC<CommentProps> = (props: CommentProps) => {
   const [isReplying, setIsReplying] = useState(false);
+  const [isEditing, setIsEditing] = useState(false);
+  const [isDeleting, setIsDeleting] = useState(false);
   const params = useParams();
   const auth = useContext(AuthContext);
 
   const handleReply = () => {
     setIsReplying(true);
-    console.log('test');
+  };
+
+  const handleEdit = () => {
+    setIsEditing(true);
+  };
+
+  const handleDelete = () => {
+    setIsDeleting(true);
   };
 
   return (
@@ -80,13 +90,28 @@ const Comment: React.FC<CommentProps> = (props: CommentProps) => {
           {props.attributes.user_username} •{' '}
           {props.attributes.created_at}
         </CommentSubtext>
-        {props.attributes.body}
+        {isEditing ? (
+          <CommentForm
+            parentId={props.id}
+            originalInput={props.attributes.body}
+            setIsDone={setIsEditing}
+            URL={`/posts/${params.id}/comments/${props.id}`}
+            fetchComments={props.fetchComments}
+          />
+        ) : (
+          props.attributes.body
+        )}
         <CommentActionsWrapper>
           <PostCommentActions onClick={() => handleReply()}>
                         Reply
           </PostCommentActions>
           {props.attributes.user_username ==
-                        auth.user?.attributes.username && <AuthorisedActions />}
+                        auth.user?.attributes.username && (
+            <AuthorisedActions
+              handleEdit={handleEdit}
+              handleDelete={handleDelete}
+            />
+          )}
         </CommentActionsWrapper>
       </CommentWrapper>
       {(props.attributes.replies.length != 0 || isReplying) && (
@@ -97,8 +122,9 @@ const Comment: React.FC<CommentProps> = (props: CommentProps) => {
               <PaddedCommentForm>
                 <CommentForm
                   parentId={props.id}
-                  setIsReplying={setIsReplying}
-                  postURL={`/posts/${params.id}/comments`}
+                  originalInput=""
+                  setIsDone={setIsReplying}
+                  URL={`/posts/${params.id}/comments`}
                   fetchComments={props.fetchComments}
                 />
               </PaddedCommentForm>

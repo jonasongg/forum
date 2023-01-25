@@ -1,12 +1,13 @@
 import React, { useContext } from 'react';
 import styled from 'styled-components';
 import { Link } from 'react-router-dom';
-import { AuthContext } from './AuthContext';
+import { AuthContext } from '../authentication/AuthContext';
 
 const Nav = styled.nav`
     display: flex;
     justify-content: space-between;
     align-items: center;
+    z-index: 1;
 
     position: sticky;
     top: 0;
@@ -71,9 +72,7 @@ const Navbar: React.FC = () => {
           </button>
         ) : (
         //When user IS null (not logged in)
-          <button onClick={() => auth.setLoginPrompted(true)}>
-                        LOG IN
-          </button>
+          <button onClick={() => auth.promptLogin}>LOG IN</button>
         )}
       </AlignRight>
     </Nav>

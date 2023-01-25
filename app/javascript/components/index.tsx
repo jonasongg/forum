@@ -3,9 +3,9 @@ import { createRoot } from 'react-dom/client';
 import { BrowserRouter } from 'react-router-dom';
 import { ThemeProvider } from 'styled-components';
 import App from './App';
-import { AuthProvider } from './AuthContext';
+import { AuthProvider } from './authentication/AuthContext';
 import GlobalStyle from './styles/GlobalStyle';
-import { theme } from './theme';
+import { theme } from './styles/theme';
 
 //App as the main handler
 document.addEventListener('DOMContentLoaded', () => {
