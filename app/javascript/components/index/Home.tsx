@@ -27,12 +27,9 @@ const Home: React.FC = () => {
   const postsList = posts.map((post) => (
     <>
       <Card
-        key={post.attributes.title}
+        key={post.attributes.title + post.id}
         id={post.id}
-        title={post.attributes.title}
-        body={post.attributes.body}
-        author={post.attributes.user_username}
-        date={post.attributes.created_at}
+        attributes={post.attributes}
       />
       <Divider />
     </>

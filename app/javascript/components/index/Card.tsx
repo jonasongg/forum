@@ -1,13 +1,12 @@
 import React from 'react';
 import styled from 'styled-components';
 import { Link } from 'react-router-dom';
+import { tPost } from '../types';
+import TagList from '../TagList';
 
 type CardProps = {
     id: number;
-    title: string;
-    body: string;
-    author: string;
-    date: string;
+    attributes: tPost['attributes'];
 };
 
 const CardWrapper = styled(Link)`
@@ -47,10 +46,12 @@ const CardSubtext = styled.div`
 const Card: React.FC<CardProps> = (props: CardProps) => {
   return (
     <CardWrapper to={`/posts/${props.id}`}>
-      <CardTitle>{props.title}</CardTitle>
-      <CardPreview>{props.body}</CardPreview>
+      <CardTitle>{props.attributes.title}</CardTitle>
+      <CardPreview>{props.attributes.body}</CardPreview>
+      <TagList tags={props.attributes.tags} />
       <CardSubtext>
-                by {props.author} • {props.date}
+                by {props.attributes.user_username} •{' '}
+        {props.attributes.created_at}
       </CardSubtext>
     </CardWrapper>
   );

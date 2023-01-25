@@ -6,6 +6,9 @@ export type tPost = {
         body: string;
         created_at: string;
         user_username: string;
+        tags: {
+            data: tTag;
+        }[];
     };
 };
 
@@ -28,6 +31,14 @@ export type tUser = {
     type: string;
     attributes: {
         username: string;
+    };
+};
+
+export type tTag = {
+    id: number;
+    type: string;
+    attributes: {
+        name: string;
     };
 };
 

@@ -5,6 +5,7 @@ import { apiDelete, apiGetPost, apiGetPostComments } from '../api';
 import { AuthContext } from '../authentication/AuthContext';
 import { PopupContext } from '../popup/PopupContext';
 import { BasicWrapper } from '../styles/SharedStyles';
+import TagList from '../TagList';
 import { tPost, tComment } from '../types';
 import AuthorisedActions from './AuthorisedActions';
 import Comment from './Comment';
@@ -75,7 +76,7 @@ const tPost: React.FC = () => {
 
   const commentsList = comments.map((comment) => (
     <Comment
-      key={comment.id}
+      key={comment.attributes.body + comment.id}
       id={comment.id}
       attributes={comment.attributes}
       fetchComments={fetchComments}
@@ -117,6 +118,7 @@ const tPost: React.FC = () => {
           handleDelete={() => handleDelete()}
         />
       )}
+      {post && <TagList tags={post?.attributes.tags} />}
       <Divider />
       <CommentForm
         parentId={-1}

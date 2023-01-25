@@ -61,3 +61,14 @@ Comment.create([
     parent: replies.first
   }
 ])
+
+Tag.create([
+  {
+    name: "Tag1",
+    post: posts.first
+  },
+  {
+    name: "Tag2",
+    post: posts.first
+  }
+])

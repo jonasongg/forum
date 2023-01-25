@@ -15,4 +15,5 @@ export const theme: DefaultTheme = {
   darkContrast: '#282828',
   boxShadow: '0px 0px 2px 1px rgba(0, 0, 0, 0.02)',
   boxShadowStrong: '0px 0px 2px 1px rgba(0, 0, 0, 0.08)',
+  accentColor: '#2395e1',
 };

@@ -16,5 +16,6 @@ declare module 'styled-components' {
         darkContrast: string;
         boxShadow: string;
         boxShadowStrong: string;
+        accentColor: string;
     }
 }
