@@ -21,7 +21,7 @@ module Api
         if @post.save
           render json: PostSerializer.new(@post).serializable_hash.to_json
         else
-          render json: { error: @post.error.messages }, status: :unprocessable_entity
+          render json: { error: @post.errors.messages }, status: :unprocessable_entity
         end
       end
 
@@ -31,7 +31,7 @@ module Api
         if @post.update(post_params)
           render json: PostSerializer.new(@post).serializable_hash.to_json
         else
-          render json: { error: @post.error.messages }, status: :unprocessable_entity
+          render json: { error: @post.errors.messages }, status: :unprocessable_entity
         end
       end
 
@@ -41,7 +41,7 @@ module Api
         if @post.destroy
           render json: PostSerializer.new(@post).serializable_hash.to_json
         else
-          render json: { error: @post.error.messages }, status: :unprocessable_entity
+          render json: { error: @post.errors.messages }, status: :unprocessable_entity
         end
       end
 
