@@ -2,27 +2,41 @@ import React, { useState, useEffect } from 'react';
 import styled from 'styled-components';
 import Card from './Card';
 import { tPost } from '../types';
-import { apiGetAllPosts } from '../api';
-import { BasicWrapper } from '../styles/SharedStyles';
+import { apiGetAllPosts, apiSearch } from '../api';
+import { BasicWrapper, Divider, NoComments } from '../styles/SharedStyles';
 
-const Divider = styled.div`
-    border-top: 1px solid ${(props) => props.theme.subMain};
-    margin: 0px 0px 0px 2%;
-    width: 96%;
+type HomeProps = {
+    searchInput: string;
+};
 
+const HomeDivider = styled(Divider)`
     :last-of-type {
         border: none;
     }
 `;
 
-const Home: React.FC = () => {
+const NoPosts = styled(NoComments)`
+    margin-top: 20px;
+    font-size: medium;
+`;
+
+const Home: React.FC<HomeProps> = (props) => {
   const [posts, setPosts] = useState<tPost[]>([]);
+  const [isEmpty, setIsEmpty] = useState(false);
 
   useEffect(() => {
-    (async () => {
-      setPosts((await apiGetAllPosts()).data.data);
-    })();
-  }, []);
+    if (props.searchInput.length == 0) {
+      (async () => {
+        setPosts((await apiGetAllPosts()).data.data);
+      })();
+    } else {
+      (async () => {
+        const response = (await apiSearch(props.searchInput)).data.data;
+        setPosts(response);
+        setIsEmpty(response.length == 0);
+      })();
+    }
+  }, [props.searchInput]);
 
   const postsList = posts.map((post) => (
     <>
@@ -31,11 +45,15 @@ const Home: React.FC = () => {
         id={post.id}
         attributes={post.attributes}
       />
-      <Divider />
+      <HomeDivider />
     </>
   ));
 
-  return <BasicWrapper>{postsList}</BasicWrapper>;
+  return isEmpty ? (
+    <NoPosts>no posts found</NoPosts>
+  ) : (
+    <BasicWrapper>{postsList}</BasicWrapper>
+  );
 };
 
 export default Home;

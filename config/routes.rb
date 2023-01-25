@@ -9,7 +9,10 @@ Rails.application.routes.draw do
         resources :comments, except: [:new]
       end
       resources :users, only: [:show]
+      resources :tags, only: [:index]
       post '/login', to: 'users#login'
+      post '/search', to: 'posts#search'
+      post '/tag', to: 'posts#tag_search'
     end
   end
 

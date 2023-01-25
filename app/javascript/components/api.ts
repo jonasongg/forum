@@ -73,6 +73,18 @@ const apiDelete = async (URL: string) => {
   return axiosInstance.delete(URL);
 };
 
+const apiSearch = async (query: string) => {
+  return axiosInstance.post('/search', { query: query });
+};
+
+const apiTagSearch = async (tag: string) => {
+  return axiosInstance.post('/tag', { tag: tag });
+};
+
+const apiGetTags = async () => {
+  return axiosInstance.get('/tag');
+};
+
 export {
   axiosInstance,
   apiPostLogin,
@@ -85,4 +97,7 @@ export {
   apiPostPost,
   apiPutPost,
   apiDelete,
+  apiSearch,
+  apiTagSearch,
+  apiGetTags,
 };

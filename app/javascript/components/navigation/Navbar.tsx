@@ -1,7 +1,12 @@
-import React, { useContext } from 'react';
+import React, { useContext, useState } from 'react';
 import styled from 'styled-components';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { AuthContext } from '../authentication/AuthContext';
+import { apiSearch } from '../api';
+
+type NavbarProps = {
+    setSearchInput: React.Dispatch<React.SetStateAction<string>>;
+};
 
 const Nav = styled.nav`
     display: flex;
@@ -58,14 +63,26 @@ const SearchInput = styled.input`
     transition: border 0.2s, width 0.5s;
 `;
 
-const Navbar: React.FC = () => {
+const Navbar: React.FC<NavbarProps> = (props) => {
   const auth = useContext(AuthContext);
+
+  const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const inputValue = event.target.value;
+    props.setSearchInput(inputValue);
+  };
+
+  // const handleSearch = () => {
+  //   apiSearch(input);
+  // };
 
   return (
     <Nav>
       <HomeLogo to="/">forum</HomeLogo>
       <AlignRight>
-        <SearchInput placeholder="Search..." />
+        <SearchInput
+          placeholder="Search..."
+          onChange={(e) => handleChange(e)}
+        />
         {auth.user ? (
         //When user is NOT null (a user is logged in)
           <button onClick={() => auth.logout()}>

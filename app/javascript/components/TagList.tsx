@@ -1,6 +1,6 @@
 import React from 'react';
-import { Link } from 'react-router-dom';
 import styled from 'styled-components';
+import { StyledConfirmButton } from './styles/SharedStyles';
 import { tTag } from './types';
 
 type TagProps = {
@@ -9,22 +9,14 @@ type TagProps = {
     }[];
 };
 
-const Tag = styled(Link)`
-    display: flex;
-    align-content: center;
-    justify-content: center;
+const Tag = styled(StyledConfirmButton)`
+    height: fit-content;
+    width: fit-content;
 
-    background-color: ${(props) => props.theme.dark};
-    color: white;
     font-size: 12px;
     font-weight: 600;
     border-radius: 5px;
     padding: 4px 7px;
-    text-decoration: none;
-
-    :hover {
-        color: white;
-    }
 `;
 
 const TagsWrapper = styled.div`
@@ -35,7 +27,7 @@ const TagsWrapper = styled.div`
 
 const TagList: React.FC<TagProps> = (props) => {
   const tagList = props.tags.map((tag) => (
-    <Tag key={tag.data.attributes.name + tag.data.id} to="/">
+    <Tag key={tag.data.attributes.name + tag.data.id}>
       {tag.data.attributes.name}
     </Tag>
   ));

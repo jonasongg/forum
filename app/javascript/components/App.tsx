@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { Routes, Route } from 'react-router-dom';
 import styled from 'styled-components';
 import Home from './index/Home';
@@ -27,17 +27,22 @@ const ContentWrapper = styled.div`
 `;
 
 const App: React.FC = () => {
+  const [searchInput, setSearchInput] = useState('');
+
   return (
     <PopupProvider>
       <AuthProvider>
         <Popup />
         <Wrapper>
-          <Navbar />
+          <Navbar setSearchInput={setSearchInput} />
           <PageWrapper>
             <Sidebar />
             <ContentWrapper>
               <Routes>
-                <Route path="/" element={<Home />} />
+                <Route
+                  path="/"
+                  element={<Home searchInput={searchInput} />}
+                />
                 <Route path="/posts/:id" element={<Post />} />
                 <Route path="/create" element={<NewPost />} />
               </Routes>

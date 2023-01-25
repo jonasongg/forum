@@ -45,6 +45,19 @@ module Api
         end
       end
 
+      def search
+        @posts = Post.where("lower(title) LIKE :query OR lower(body) LIKE :query", query: "%#{params[:query]}%")
+                     .order(created_at: :desc)
+
+        render json: PostSerializer.new(@posts).serializable_hash.to_json
+      end
+
+      def tag_search
+        @posts = Post.where(tag: params[:tag]).order(created_at: :desc)
+
+        render json: PostSerializer.new(@posts).serializable_hash.to_json
+      end
+      
       private
       def post_params
         params.require(:post).permit(:title, :body, :user_id)

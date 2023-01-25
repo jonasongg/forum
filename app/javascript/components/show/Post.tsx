@@ -4,7 +4,7 @@ import styled from 'styled-components';
 import { apiDelete, apiGetPost, apiGetPostComments } from '../api';
 import { AuthContext } from '../authentication/AuthContext';
 import { PopupContext } from '../popup/PopupContext';
-import { BasicWrapper } from '../styles/SharedStyles';
+import { BasicWrapper, Divider, NoComments } from '../styles/SharedStyles';
 import TagList from '../TagList';
 import { tPost, tComment } from '../types';
 import AuthorisedActions from './AuthorisedActions';
@@ -35,20 +35,6 @@ const PostTitle = styled.div`
 const PostBody = styled.div`
     color: black;
     font-size: medium;
-`;
-
-const Divider = styled.div`
-    border-top: 1px solid ${(props) => props.theme.subMain};
-    margin: 0px 0px 0px 2%;
-    width: 96%;
-`;
-
-const NoComments = styled.div`
-    display: flex;
-    justify-content: center;
-    color: ${(props) => props.theme.subText};
-    font-size: small;
-    //margin-bottom: -5px;
 `;
 
 const tPost: React.FC = () => {

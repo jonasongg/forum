@@ -31,3 +31,16 @@ export const ButtonsWrapper = styled.div`
     gap: 10px;
     margin: 20px -10px -20px 0px;
 `;
+
+export const NoComments = styled.div`
+    display: flex;
+    justify-content: center;
+    color: ${(props) => props.theme.subText};
+    font-size: small;
+`;
+
+export const Divider = styled.div`
+    border-top: 1px solid ${(props) => props.theme.subMain};
+    margin: 0px 0px 0px 2%;
+    width: 96%;
+`;

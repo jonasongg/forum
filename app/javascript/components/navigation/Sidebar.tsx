@@ -1,12 +1,18 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import styled from 'styled-components';
+import { apiGetTags } from '../api';
+import { Divider } from '../styles/SharedStyles';
+import TagList from '../TagList';
+import { tTag } from '../types';
 
 const Side = styled.aside`
     display: flex;
     gap: 20px;
-    justify-content: center;
+    align-items: center;
+    flex-direction: column;
 
+    padding: 30px;
     font-size: 15px;
     font-weight: 500;
     width: 25%;
@@ -17,9 +23,6 @@ const Side = styled.aside`
 `;
 
 const CreatePost = styled(Link)`
-    width: 75%;
-    margin-top: 12%;
-
     font-size: medium;
     font-weight: 400;
     background: ${(props) => props.theme.dark}
@@ -37,10 +40,30 @@ const CreatePost = styled(Link)`
     }
 `;
 
+const AlignLeft = styled.div`
+    width: 100%;
+`;
+
+const SearchBy = styled.div`
+    font-size: small;
+    font-weight: 600;
+`;
+
 const Sidebar: React.FC = () => {
+  const [tags, setTags] = useState<tTag[]>([]);
+  useEffect(() => {
+    (async () => {
+      setTags((await apiGetTags()).data.data);
+    })();
+  });
   return (
     <Side>
       <CreatePost to="/create">Create a new post</CreatePost>
+      <Divider />
+      <AlignLeft>
+        {/* <SearchBy>SEARCH BY</SearchBy>
+        <TagList isSidebar={true} tags={tags} /> */}
+      </AlignLeft>
     </Side>
   );
 };
