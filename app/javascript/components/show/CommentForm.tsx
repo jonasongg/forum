@@ -4,7 +4,7 @@ import styled from 'styled-components';
 import { apiPostComment, apiPutComment } from '../api';
 import { AuthContext } from '../authentication/AuthContext';
 import CustomTextArea from '../CustomTextArea';
-import { PostCommentButton } from '../styles/StyledButtons';
+import { PostCommentButton } from '../styles/SharedStyles';
 import { tUser } from '../types';
 
 type CommentFormProps = {

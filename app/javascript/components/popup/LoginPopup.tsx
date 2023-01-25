@@ -1,7 +1,12 @@
 import React, { useContext, useEffect, useState } from 'react';
 import styled from 'styled-components';
-import { StyledConfirmButton } from '../styles/StyledButtons';
-import { AuthContext } from './AuthContext';
+import { PopupContext } from './PopupContext';
+import {
+  ButtonsWrapper,
+  PopupTitle,
+  StyledConfirmButton,
+} from '../styles/SharedStyles';
+import { AuthContext } from '../authentication/AuthContext';
 
 const UsernameInput = styled.input<{ error: boolean }>`
     width: 40%;
@@ -31,18 +36,12 @@ const ErrorMessage = styled.div`
     margin-top: 7px;
 `;
 
-const ButtonsWrapper = styled.div`
-    display: flex;
-    justify-content: flex-end;
-    gap: 10px;
-    margin: 20px -10px -20px 0px;
-`;
-
 const LoginPopup: React.FC = () => {
   const [error, setError] = useState(false);
   const [valid, setValid] = useState(true);
   const [input, setInput] = useState('');
   const auth = useContext(AuthContext);
+  const popup = useContext(PopupContext);
 
   const handleChange = (event: React.FormEvent<HTMLInputElement>) => {
     setInput((event.target as HTMLInputElement).value);
@@ -62,32 +61,40 @@ const LoginPopup: React.FC = () => {
       setError(true);
     } else {
       auth.login(input);
-      auth.setLoginPrompted(false);
+      popup.setPopupPrompted(0);
     }
   };
 
   return (
-    <form onSubmit={handleProceed}>
-      <UsernameInput
-        placeholder="username"
-        type="text"
-        name="username"
-        onChange={handleChange}
-        error={error}
-      />
-      {error && (
-        <ErrorMessage>
-                    Username must be at least 5 characters long and contain only
-                    alphanumeric characters.
-        </ErrorMessage>
-      )}
-      <ButtonsWrapper>
-        <StyledConfirmButton type="submit">PROCEED</StyledConfirmButton>
-        <button onClick={() => auth.setLoginPrompted(false)}>
-                    CANCEL
-        </button>
-      </ButtonsWrapper>
-    </form>
+    <>
+      <PopupTitle>Log in</PopupTitle>
+      <div>
+                Enter your existing username or a new one to create a new user.
+      </div>
+      <form onSubmit={handleProceed}>
+        <UsernameInput
+          placeholder="username"
+          type="text"
+          name="username"
+          onChange={handleChange}
+          error={error}
+        />
+        {error && (
+          <ErrorMessage>
+                        Username must be at least 5 characters long and contain
+                        only alphanumeric characters.
+          </ErrorMessage>
+        )}
+        <ButtonsWrapper>
+          <StyledConfirmButton type="submit">
+                        PROCEED
+          </StyledConfirmButton>
+          <button onClick={() => popup.setPopupPrompted(0)}>
+                        CANCEL
+          </button>
+        </ButtonsWrapper>
+      </form>
+    </>
   );
 };
 

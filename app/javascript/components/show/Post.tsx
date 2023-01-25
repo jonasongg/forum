@@ -3,9 +3,8 @@ import { useParams } from 'react-router-dom';
 import styled from 'styled-components';
 import { apiGetPost, apiGetPostComments } from '../api';
 import { AuthContext } from '../authentication/AuthContext';
-import { BasicWrapper } from '../styles/BasicWrapper';
+import { BasicWrapper } from '../styles/SharedStyles';
 import { tPost, tComment } from '../types';
-import AuthorisedActions from './AuthorisedActions';
 import Comment from './Comment';
 import CommentForm from './CommentForm';
 

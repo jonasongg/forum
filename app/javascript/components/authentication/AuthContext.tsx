@@ -1,15 +1,14 @@
 import jwtDecode from 'jwt-decode';
-import React, { createContext, useEffect, useState } from 'react';
+import React, { createContext, useContext, useEffect, useState } from 'react';
 import { apiGetUser, apiPostLogin } from '../api';
+import { PopupContext } from '../popup/PopupContext';
 import { tToken, tUser } from '../types';
 
 type tAuthContext = {
     user: tUser | null;
     login: (username: string) => Promise<tUser | null>;
-    promptLogin: (afterLoginValue: (user: tUser) => void) => void;
+    promptLogin: (afterLoginValue?: (user: tUser) => void) => void;
     logout: () => void;
-    loginPrompted: boolean;
-    setLoginPrompted: React.Dispatch<React.SetStateAction<boolean>>;
 };
 
 type AuthProviderProps = {
@@ -20,7 +19,7 @@ const AuthContext = createContext<tAuthContext>({} as tAuthContext);
 
 const AuthProvider: React.FC<AuthProviderProps> = (props) => {
   const [user, setUser] = useState<tUser | null>(null);
-  const [loginPrompted, setLoginPrompted] = useState(false);
+  const popup = useContext(PopupContext);
 
   const setAfterLoginDefault = () =>
     console.log('Default value of afterLogin');
@@ -44,6 +43,18 @@ const AuthProvider: React.FC<AuthProviderProps> = (props) => {
     })();
   }, []);
 
+  //Add interceptor to handle unauthorised error by opening login prompt
+  // useEffect(() => {
+  //   axiosInstance.interceptors.response.use(
+  //     (rsp) => rsp,
+  //     (error) => {
+  //       if (error.response.status === 401) {
+  //         auth.setLoginPrompted(true);
+  //       }
+  //     }
+  //   );
+  // }, []);
+
   const auth = () => {
     const login = async (username: string) => {
       // if (user) {
@@ -61,12 +72,17 @@ const AuthProvider: React.FC<AuthProviderProps> = (props) => {
       // }
     };
 
-    const promptLogin = (afterLoginValue: (user: tUser) => void) => {
+    const promptLogin = (afterLoginValue?: (user: tUser) => void) => {
+      console.log('test');
       if (!user) {
-        setLoginPrompted(true);
-        setAfterLogin(() => afterLoginValue);
+        popup.setPopupPrompted(1);
+        if (afterLoginValue) {
+          setAfterLogin(() => afterLoginValue);
+        }
       } else {
-        afterLoginValue(user);
+        if (afterLoginValue) {
+          afterLoginValue(user);
+        }
         setAfterLogin(() => setAfterLoginDefault);
       }
     };
@@ -88,8 +104,6 @@ const AuthProvider: React.FC<AuthProviderProps> = (props) => {
       login,
       promptLogin,
       logout,
-      loginPrompted,
-      setLoginPrompted,
     };
   };
 

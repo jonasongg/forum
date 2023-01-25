@@ -1,6 +1,6 @@
 import React from 'react';
 import styled from 'styled-components';
-import { BasicWrapper } from './styles/BasicWrapper';
+import { BasicWrapper } from './styles/SharedStyles';
 
 const DropdownWrapper = styled.div`
     position: relative;

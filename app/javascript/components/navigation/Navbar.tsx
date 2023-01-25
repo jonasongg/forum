@@ -60,6 +60,7 @@ const SearchInput = styled.input`
 
 const Navbar: React.FC = () => {
   const auth = useContext(AuthContext);
+
   return (
     <Nav>
       <HomeLogo to="/">forum</HomeLogo>
@@ -72,7 +73,7 @@ const Navbar: React.FC = () => {
           </button>
         ) : (
         //When user IS null (not logged in)
-          <button onClick={() => auth.promptLogin}>LOG IN</button>
+          <button onClick={() => auth.promptLogin()}>LOG IN</button>
         )}
       </AlignRight>
     </Nav>

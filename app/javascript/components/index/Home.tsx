@@ -3,7 +3,7 @@ import styled from 'styled-components';
 import Card from './Card';
 import { tPost } from '../types';
 import { apiGetAllPosts } from '../api';
-import { BasicWrapper } from '../styles/BasicWrapper';
+import { BasicWrapper } from '../styles/SharedStyles';
 
 const Divider = styled.div`
     border-top: 1px solid ${(props) => props.theme.subMain};

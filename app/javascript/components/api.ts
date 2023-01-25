@@ -55,6 +55,10 @@ const apiPutComment = async (URL: string, data: tApiPostComment) => {
   return axiosInstance.put(URL, data);
 };
 
+const apiDeleteComment = async (URL: string) => {
+  return axiosInstance.delete(URL);
+};
+
 type tApiPostPost = {
     title: string;
     body: string;
@@ -75,4 +79,5 @@ export {
   apiPostComment,
   apiPutComment,
   apiPostPost,
+  apiDeleteComment,
 };

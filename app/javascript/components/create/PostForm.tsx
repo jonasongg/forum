@@ -1,11 +1,10 @@
 import React, { useContext, useState } from 'react';
-import { redirect, useNavigate } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
 import { apiPostPost } from '../api';
 import { AuthContext } from '../authentication/AuthContext';
 import CustomTextArea from '../CustomTextArea';
-import { BasicWrapper } from '../styles/BasicWrapper';
-import { PostCommentButton } from '../styles/StyledButtons';
+import { BasicWrapper, PostCommentButton } from '../styles/SharedStyles';
 import { tUser } from '../types';
 
 const NewPostWrapper = styled(BasicWrapper)`

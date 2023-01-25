@@ -1,14 +1,14 @@
-import React, { useContext, useEffect } from 'react';
+import React from 'react';
 import { Routes, Route } from 'react-router-dom';
 import styled from 'styled-components';
 import Home from './index/Home';
 import Post from './show/Post';
-import Navbar from './Navbar';
-import Sidebar from './Sidebar';
-import Popup from './Popup';
-import { AuthContext } from './AuthContext';
-import { axiosInstance } from './api';
+import Navbar from './navigation/Navbar';
+import Popup from './popup/Popup';
+import { AuthProvider } from './authentication/AuthContext';
 import NewPost from './create/PostForm';
+import Sidebar from './navigation/Sidebar';
+import { PopupProvider } from './popup/PopupContext';
 
 const Wrapper = styled.div`
     display: flex;
@@ -27,37 +27,25 @@ const ContentWrapper = styled.div`
 `;
 
 const App: React.FC = () => {
-  const auth = useContext(AuthContext);
-
-  //Add interceptor to handle unauthorised error by opening login prompt
-  useEffect(() => {
-    axiosInstance.interceptors.response.use(
-      (rsp) => rsp,
-      (error) => {
-        if (error.response.status === 401) {
-          auth.setLoginPrompted(true);
-        }
-      }
-    );
-  }, []);
-
   return (
-    <>
-      {auth.loginPrompted && <Popup />}
-      <Wrapper>
-        <Navbar />
-        <PageWrapper>
-          <Sidebar />
-          <ContentWrapper>
-            <Routes>
-              <Route path="/" element={<Home />} />
-              <Route path="/posts/:id" element={<Post />} />
-              <Route path="/create" element={<NewPost />} />
-            </Routes>
-          </ContentWrapper>
-        </PageWrapper>
-      </Wrapper>
-    </>
+    <PopupProvider>
+      <AuthProvider>
+        <Popup />
+        <Wrapper>
+          <Navbar />
+          <PageWrapper>
+            <Sidebar />
+            <ContentWrapper>
+              <Routes>
+                <Route path="/" element={<Home />} />
+                <Route path="/posts/:id" element={<Post />} />
+                <Route path="/create" element={<NewPost />} />
+              </Routes>
+            </ContentWrapper>
+          </PageWrapper>
+        </Wrapper>
+      </AuthProvider>
+    </PopupProvider>
   );
 };
 
