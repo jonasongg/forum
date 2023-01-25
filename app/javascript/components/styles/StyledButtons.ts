@@ -9,3 +9,7 @@ export const StyledConfirmButton = styled.button`
         background-color: ${(props) => props.theme.darkContrast};
     }
 `;
+
+export const PostCommentButton = styled(StyledConfirmButton)`
+    width: fit-content;
+`;

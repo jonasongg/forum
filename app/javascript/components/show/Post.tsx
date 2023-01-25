@@ -1,20 +1,17 @@
-/* eslint-disable @typescript-eslint/no-empty-function */
 import React, { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import styled from 'styled-components';
 import { apiGetPost, apiGetPostComments } from '../api';
+import { BasicWrapper } from '../styles/BasicWrapper';
 import { tPost, tComment } from '../types';
 import Comment from './Comment';
 import CommentForm from './CommentForm';
 
-const PostWrapper = styled.div`
+const PostWrapper = styled(BasicWrapper)`
     display: flex;
     flex-direction: column;
     gap: 20px;
 
-    background-color: ${(props) => props.theme.background};
-    border-radius: 10px;
-    box-shadow: ${(props) => props.theme.boxShadow};
     padding: 20px 20px 15px 20px;
 `;
 

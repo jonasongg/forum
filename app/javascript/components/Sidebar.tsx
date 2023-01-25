@@ -1,4 +1,5 @@
 import React from 'react';
+import { Link } from 'react-router-dom';
 import styled from 'styled-components';
 
 const Side = styled.aside`
@@ -15,7 +16,7 @@ const Side = styled.aside`
     box-shadow: ${(props) => props.theme.boxShadow};
 `;
 
-const CreateButton = styled.button`
+const CreatePost = styled(Link)`
     width: 75%;
     margin-top: 12%;
 
@@ -27,26 +28,19 @@ const CreateButton = styled.button`
     border-radius: 10px;
     padding: 8px 20px 8px 45px;
     color: white;
+    text-decoration: none;
 
     box-shadow: ${(props) => props.theme.boxShadowStrong};
     :hover {
         background-color: ${(props) => props.theme.darkContrast};
+        color: white;
     }
 `;
 
 const Sidebar: React.FC = () => {
-  const handlePost = () => {
-    // axiosInstance
-    //   .post('/posts')
-    //   .then((response) => console.log(response))
-    //   .catch(console.log);
-  };
-
   return (
     <Side>
-      <CreateButton onClick={() => handlePost()}>
-                Create a new post
-      </CreateButton>
+      <CreatePost to="/create">Create a new post</CreatePost>
     </Side>
   );
 };

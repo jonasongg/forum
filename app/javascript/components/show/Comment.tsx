@@ -1,7 +1,10 @@
-import React, { useState } from 'react';
+import React, { useContext, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import styled from 'styled-components';
+import { AuthContext } from '../AuthContext';
+import { PostCommentActions } from '../styles/PostCommentActions';
 import { tComment } from '../types';
+import AuthorisedActions from './AuthorisedActions';
 import CommentForm from './CommentForm';
 
 type CommentProps = {
@@ -28,16 +31,9 @@ const CommentSubtext = styled.div`
     font-size: small;
 `;
 
-const CommentReply = styled.div`
-    width: fit-content;
-    cursor: pointer;
-    color: ${(props) => props.theme.subText};
-    :hover {
-        text-decoration: underline;
-    }
-
-    font-weight: 600;
-    font-size: small;
+const CommentActionsWrapper = styled.div`
+    display: flex;
+    gap: 15px;
 `;
 
 const LineWrapper = styled.div`
@@ -70,6 +66,7 @@ const Replies = styled.div`
 const Comment: React.FC<CommentProps> = (props: CommentProps) => {
   const [isReplying, setIsReplying] = useState(false);
   const params = useParams();
+  const auth = useContext(AuthContext);
 
   const handleReply = () => {
     setIsReplying(true);
@@ -84,7 +81,13 @@ const Comment: React.FC<CommentProps> = (props: CommentProps) => {
           {props.attributes.created_at}
         </CommentSubtext>
         {props.attributes.body}
-        <CommentReply onClick={() => handleReply()}>Reply</CommentReply>
+        <CommentActionsWrapper>
+          <PostCommentActions onClick={() => handleReply()}>
+                        Reply
+          </PostCommentActions>
+          {props.attributes.user_username ==
+                        auth.user?.attributes.username && <AuthorisedActions />}
+        </CommentActionsWrapper>
       </CommentWrapper>
       {(props.attributes.replies.length != 0 || isReplying) && (
         <LineWrapper>

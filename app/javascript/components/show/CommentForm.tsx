@@ -3,7 +3,8 @@ import { useParams } from 'react-router-dom';
 import styled from 'styled-components';
 import { apiPostComment } from '../api';
 import { AuthContext } from '../AuthContext';
-import { StyledConfirmButton } from '../styles/StyledConfirmButton';
+import CustomTextArea from '../CustomTextArea';
+import { PostCommentButton } from '../styles/StyledButtons';
 import { tUser } from '../types';
 
 type CommentFormProps = {
@@ -25,55 +26,14 @@ const ButtonsWrapper = styled.div`
     gap: 10px;
 `;
 
-const PostCommentButton = styled(StyledConfirmButton)`
-    width: fit-content;
-`;
-
-const CommentTextarea = styled.textarea<{ isFocus: boolean; error: boolean }>`
-    width: ${(props) => (props.isFocus ? '100%' : '95%')};
-    height: ${(props) => (props.isFocus ? '200px' : '100px')};
-    background-color: ${(props) =>
-    props.isFocus ? props.theme.background : props.theme.main};
-
-    padding: 10px;
-    resize: none;
-    outline: none;
-    border: 2px solid
-        ${(props) =>
-    props.isFocus
-      ? props.error
-        ? props.theme.subError
-        : props.theme.subMain
-      : props.theme.main};
-    border-radius: 10px;
-    box-shadow: ${(props) =>
-    props.isFocus ? props.theme.boxShadow : props.theme.boxShadowStrong};
-
-    transition: background-color 0.2s, width 0.2s, border 0.2s, height 0.4s;
-`;
-
 const CommentForm: React.FC<CommentFormProps> = (props) => {
-  const [input, setInput] = useState('');
   const [focus, setFocus] = useState(false);
+  const [input, setInput] = useState('');
   const [error, setError] = useState(false);
 
   const textAreaRef = useRef<HTMLTextAreaElement>(null);
   const auth = useContext(AuthContext);
   const params = useParams();
-
-  const handleChange = (event: React.FormEvent<HTMLTextAreaElement>) => {
-    const inputValue = (event.target as HTMLTextAreaElement).value;
-
-    setInput(inputValue);
-    if (inputValue.length != 0) {
-      setError(false);
-    }
-  };
-
-  const handleBlur = () => {
-    setFocus(input.length != 0); //Unfocus only if length is 0
-    setError(false);
-  };
 
   const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
@@ -112,18 +72,17 @@ const CommentForm: React.FC<CommentFormProps> = (props) => {
 
   return (
     <NewCommentForm onSubmit={handleSubmit}>
-      <CommentTextarea
+      <CustomTextArea
+        isTextArea={true}
         placeholder={`Write a ${
           props.parentId > 0 ? 'reply' : 'comment'
         }...`}
-        ref={textAreaRef}
-        onFocus={() => setFocus(true)}
-        onBlur={() => handleBlur()} //Set unfocused only when length is 0 (textarea empty)
-        onChange={handleChange}
-        isFocus={focus}
-        error={error}
+        useInputState={[input, setInput]}
+        useErrorState={[error, setError]}
+        useFocusState={[focus, setFocus]}
         autoFocus={props.parentId > 0}
-      ></CommentTextarea>
+        //ref={textAreaRef}
+      />
       {focus && (
         <ButtonsWrapper>
           <PostCommentButton

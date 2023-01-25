@@ -1,7 +1,7 @@
 import React, { useContext, useEffect, useState } from 'react';
 import styled from 'styled-components';
 import { AuthContext } from './AuthContext';
-import { StyledConfirmButton } from './styles/StyledConfirmButton';
+import { StyledConfirmButton } from './styles/StyledButtons';
 
 const PopupWrapper = styled.div`
     display: flex;

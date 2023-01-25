@@ -28,12 +28,20 @@ const AuthProvider: React.FC<AuthProviderProps> = (props) => {
     () => setAfterLoginDefault
   );
 
+  const decodeUser = async (token: string) => {
+    const decoded: tToken = jwtDecode(token);
+    const getRsp = await apiGetUser(decoded.user_id);
+
+    return getRsp.data.data;
+  };
+
   useEffect(() => {
-    const token = localStorage.getItem('token');
-    if (token) {
-      console.log(JSON.parse(token));
-      setUser(JSON.parse(token));
-    }
+    (async () => {
+      const token = localStorage.getItem('token');
+      if (token) {
+        setUser(await decodeUser(token));
+      }
+    })();
   }, []);
 
   const auth = () => {
@@ -45,17 +53,16 @@ const AuthProvider: React.FC<AuthProviderProps> = (props) => {
 
       //If valid username, post with axios and set token in localStorage
       const token = (await apiPostLogin(username)).data.token;
-      const decoded: tToken = jwtDecode(token);
-      const getRsp = await apiGetUser(decoded.user_id);
+      localStorage.setItem('token', token);
 
-      localStorage.setItem('token', JSON.stringify(getRsp.data.data));
-      setUser(getRsp.data.data);
+      setUser(await decodeUser(token));
 
       return user;
       // }
     };
 
     const promptLogin = (afterLoginValue: (user: tUser) => void) => {
+      console.log(user);
       if (!user) {
         setLoginPrompted(true);
         setAfterLogin(() => afterLoginValue);

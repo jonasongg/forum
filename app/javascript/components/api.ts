@@ -10,7 +10,7 @@ axiosInstance.interceptors.request.use(
     const token = localStorage.getItem('token');
     config.headers = config.headers ?? {};
     config.headers['Authorization'] = `Bearer ${token}`;
-
+    console.log(config);
     return config;
   },
   (error) => {
@@ -51,12 +51,23 @@ const apiPostComment = async (URL: string, data: tApiPostComment) => {
   return axiosInstance.post(URL, data);
 };
 
+type tApiPostPost = {
+    title: string;
+    body: string;
+    user_id: number;
+};
+
+const apiPostPost = async (data: tApiPostPost) => {
+  return axiosInstance.post('/posts', data);
+};
+
 export {
   axiosInstance,
   apiPostLogin,
   apiGetUser,
   apiGetAllPosts,
-  apiPostComment,
   apiGetPost,
   apiGetPostComments,
+  apiPostComment,
+  apiPostPost,
 };

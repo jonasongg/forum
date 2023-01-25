@@ -8,6 +8,7 @@ import Sidebar from './Sidebar';
 import Popup from './Popup';
 import { AuthContext } from './AuthContext';
 import { axiosInstance } from './api';
+import NewPost from './create/PostForm';
 
 const Wrapper = styled.div`
     display: flex;
@@ -51,6 +52,7 @@ const App: React.FC = () => {
             <Routes>
               <Route path="/" element={<Home />} />
               <Route path="/posts/:id" element={<Post />} />
+              <Route path="/create" element={<NewPost />} />
             </Routes>
           </ContentWrapper>
         </PageWrapper>

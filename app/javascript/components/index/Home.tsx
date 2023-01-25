@@ -3,12 +3,7 @@ import styled from 'styled-components';
 import Card from './Card';
 import { tPost } from '../types';
 import { apiGetAllPosts } from '../api';
-
-const HomeWrapper = styled.div`
-    background-color: ${(props) => props.theme.background};
-    border-radius: 10px;
-    box-shadow: ${(props) => props.theme.boxShadow};
-`;
+import { BasicWrapper } from '../styles/BasicWrapper';
 
 const Divider = styled.div`
     border-top: 1px solid ${(props) => props.theme.subMain};
@@ -43,7 +38,7 @@ const Home: React.FC = () => {
     </>
   ));
 
-  return <HomeWrapper>{postsList}</HomeWrapper>;
+  return <BasicWrapper>{postsList}</BasicWrapper>;
 };
 
 export default Home;
