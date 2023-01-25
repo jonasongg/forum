@@ -1,20 +1,11 @@
-import React, { useContext, useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import React, { useContext, useEffect, useState } from 'react';
+import { useLocation, useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
-import { apiPostPost } from '../api';
+import { apiPostPost, apiPutPost } from '../api';
 import { AuthContext } from '../authentication/AuthContext';
 import CustomTextArea from '../CustomTextArea';
 import { BasicWrapper, PostCommentButton } from '../styles/SharedStyles';
 import { tUser } from '../types';
-
-const NewPostWrapper = styled(BasicWrapper)`
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-
-    padding: 30px;
-    gap: 20px;
-`;
 
 const NewPostForm = styled.form`
     display: flex;
@@ -33,6 +24,12 @@ const NewPostHeader = styled.div`
     font-weight: 600;
 `;
 
+type stateType = {
+    title: string;
+    body: string;
+    originalPost: string;
+};
+
 const PostForm: React.FC = () => {
   const [title, setTitle] = useState('');
   const [body, setBody] = useState('');
@@ -41,6 +38,16 @@ const PostForm: React.FC = () => {
 
   const auth = useContext(AuthContext);
   const navigate = useNavigate();
+  const stateData = useLocation().state as stateType;
+  const [isEdit, setIsEdit] = useState(false);
+
+  useEffect(() => {
+    if (stateData) {
+      setTitle(stateData.title);
+      setBody(stateData.body);
+      setIsEdit(true);
+    }
+  }, []);
 
   const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
@@ -49,18 +56,27 @@ const PostForm: React.FC = () => {
       setTitleError(title.length == 0);
       setBodyError(body.length == 0);
     } else {
-      auth.promptLogin(postPost); //Set postComment to be the afterLogin function to be called
+      auth.promptLogin(postOrEditPost); //Set postOrEditPost to be the afterLogin function to be called
     }
   };
 
-  const postPost = async (user: tUser) => {
-    await apiPostPost({
+  const postOrEditPost = async (user: tUser) => {
+    const data = {
       title: title,
       body: body,
       user_id: user.id,
-    });
+    };
+    console.log(data);
+    console.log(stateData.originalPost);
 
-    navigate('/');
+    if (isEdit) {
+      console.log(isEdit);
+      await apiPutPost(stateData.originalPost, data);
+    } else {
+      await apiPostPost(data);
+    }
+
+    navigate(isEdit ? stateData.originalPost : '/');
   };
 
   return (
@@ -72,7 +88,7 @@ const PostForm: React.FC = () => {
           placeholder="Title"
           useInputState={[title, setTitle]}
           useErrorState={[titleError, setTitleError]}
-          autoFocus={false}
+          autoFocus={isEdit}
         />
         <CustomTextArea
           isTextArea={true}

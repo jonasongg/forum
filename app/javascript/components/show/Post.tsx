@@ -1,10 +1,12 @@
 import React, { useContext, useEffect, useState } from 'react';
-import { useParams } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 import styled from 'styled-components';
-import { apiGetPost, apiGetPostComments } from '../api';
+import { apiDelete, apiGetPost, apiGetPostComments } from '../api';
 import { AuthContext } from '../authentication/AuthContext';
+import { PopupContext } from '../popup/PopupContext';
 import { BasicWrapper } from '../styles/SharedStyles';
 import { tPost, tComment } from '../types';
+import AuthorisedActions from './AuthorisedActions';
 import Comment from './Comment';
 import CommentForm from './CommentForm';
 
@@ -53,7 +55,14 @@ const tPost: React.FC = () => {
   const [comments, setComments] = useState<tComment[]>([]);
 
   const params = useParams();
+  const popup = useContext(PopupContext);
   const auth = useContext(AuthContext);
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    fetchPost();
+    fetchComments();
+  }, []);
 
   const fetchPost = async () => {
     setPost((await apiGetPost(params.id)).data.data);
@@ -64,11 +73,6 @@ const tPost: React.FC = () => {
     setComments(data);
   };
 
-  useEffect(() => {
-    fetchPost();
-    fetchComments();
-  }, []);
-
   const commentsList = comments.map((comment) => (
     <Comment
       key={comment.id}
@@ -78,6 +82,26 @@ const tPost: React.FC = () => {
     />
   ));
 
+  const handleEdit = () => {
+    navigate('/create', {
+      state: {
+        title: post?.attributes.title,
+        body: post?.attributes.body,
+        originalPost: `/posts/${params.id}/`,
+      },
+    });
+  };
+
+  const handleDelete = () => {
+    popup.promptDelete(deletePost);
+  };
+
+  const deletePost = async () => {
+    await apiDelete(`/posts/${params.id}/`);
+    popup.setPopupPrompted(0);
+    navigate('/');
+  };
+
   return (
     <PostWrapper>
       <PostSubtext>
@@ -86,8 +110,13 @@ const tPost: React.FC = () => {
       </PostSubtext>
       <PostTitle>{post?.attributes.title}</PostTitle>
       <PostBody>{post?.attributes.body}</PostBody>
-      {/* {post?.attributes.user_username ==
-                auth.user?.attributes.username && <AuthorisedActions />} */}
+      {post?.attributes.user_username ==
+                auth.user?.attributes.username && (
+        <AuthorisedActions
+          handleEdit={() => handleEdit()}
+          handleDelete={() => handleDelete()}
+        />
+      )}
       <Divider />
       <CommentForm
         parentId={-1}

@@ -1,7 +1,7 @@
 import React, { useContext, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import styled from 'styled-components';
-import { apiDeleteComment } from '../api';
+import { apiDelete } from '../api';
 import { AuthContext } from '../authentication/AuthContext';
 import Dropdown from '../Dropdown';
 import { PopupContext } from '../popup/PopupContext';
@@ -87,7 +87,7 @@ const Comment: React.FC<CommentProps> = (props: CommentProps) => {
   };
 
   const deleteComment = async () => {
-    await apiDeleteComment(`/posts/${params.id}/comments/${props.id}`);
+    await apiDelete(`/posts/${params.id}/comments/${props.id}`);
     popup.setPopupPrompted(0);
     props.fetchComments();
   };

@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import styled, { css } from 'styled-components';
 
 type CustomTextAreaProps = {
@@ -61,6 +61,10 @@ const CustomTextArea: React.FC<CustomTextAreaProps> = (props) => {
     setFocus(input.length != 0); //Unfocus only if length is 0
     setError(false);
   };
+
+  useEffect(() => {
+    setFocus(input.length != 0);
+  }, [input]);
 
   const subProps = {
     placeholder: props.placeholder,

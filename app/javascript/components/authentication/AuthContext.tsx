@@ -73,7 +73,6 @@ const AuthProvider: React.FC<AuthProviderProps> = (props) => {
     };
 
     const promptLogin = (afterLoginValue?: (user: tUser) => void) => {
-      console.log('test');
       if (!user) {
         popup.setPopupPrompted(1);
         if (afterLoginValue) {

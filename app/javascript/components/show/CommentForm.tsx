@@ -1,4 +1,4 @@
-import React, { useContext, useEffect, useRef, useState } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import styled from 'styled-components';
 import { apiPostComment, apiPutComment } from '../api';
@@ -32,7 +32,6 @@ const CommentForm: React.FC<CommentFormProps> = (props) => {
   const [input, setInput] = useState('');
   const [error, setError] = useState(false);
 
-  const textAreaRef = useRef<HTMLTextAreaElement>(null);
   const auth = useContext(AuthContext);
   const params = useParams();
 
