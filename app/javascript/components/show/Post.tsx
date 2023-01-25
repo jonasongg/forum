@@ -1,9 +1,11 @@
-import React, { useEffect, useState } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import styled from 'styled-components';
 import { apiGetPost, apiGetPostComments } from '../api';
+import { AuthContext } from '../authentication/AuthContext';
 import { BasicWrapper } from '../styles/BasicWrapper';
 import { tPost, tComment } from '../types';
+import AuthorisedActions from './AuthorisedActions';
 import Comment from './Comment';
 import CommentForm from './CommentForm';
 
@@ -50,7 +52,9 @@ const NoComments = styled.div`
 const tPost: React.FC = () => {
   const [post, setPost] = useState<tPost>();
   const [comments, setComments] = useState<tComment[]>([]);
+
   const params = useParams();
+  const auth = useContext(AuthContext);
 
   const fetchPost = async () => {
     setPost((await apiGetPost(params.id)).data.data);
@@ -58,7 +62,6 @@ const tPost: React.FC = () => {
 
   const fetchComments = async () => {
     const data = (await apiGetPostComments(params.id)).data.data;
-    console.log(data);
     setComments(data);
   };
 
@@ -84,10 +87,13 @@ const tPost: React.FC = () => {
       </PostSubtext>
       <PostTitle>{post?.attributes.title}</PostTitle>
       <PostBody>{post?.attributes.body}</PostBody>
+      {/* {post?.attributes.user_username ==
+                auth.user?.attributes.username && <AuthorisedActions />} */}
       <Divider />
       <CommentForm
         parentId={-1}
-        postURL={`/posts/${params.id}/comments`}
+        originalInput=""
+        URL={`/posts/${params.id}/comments`}
         fetchComments={fetchComments}
       />
       {comments.length == 0 ? (

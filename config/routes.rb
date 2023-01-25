@@ -6,7 +6,7 @@ Rails.application.routes.draw do
   namespace :api do
     namespace :v1 do
       resources :posts, except: [:new, :edit] do
-        resources :comments, except: [:new, :edit]
+        resources :comments, except: [:new]
       end
       resources :users, only: [:show]
       post '/login', to: 'users#login'
