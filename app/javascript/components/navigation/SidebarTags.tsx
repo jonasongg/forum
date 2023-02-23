@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
 import { apiTagSearch } from '../api';
-import { Tag } from '../styles/SharedStyles';
+import { StyledConfirmButton, Tag } from '../styles/SharedStyles';
 import { tTag } from '../types';
 
 type tSidebarTagsProps = {
@@ -12,17 +12,26 @@ type tSidebarTagsProps = {
 const TagsWrapper = styled.div`
     display: flex;
     flex-direction: column;
-    gap: 10px;
+    align-items: center;
+
+    gap: 13px;
 `;
 
 const TagWrapper = styled.button<{ selected: boolean }>`
     padding: 25px;
     font-size: medium;
     justify-content: flex-start;
+    width: 100%;
+    border: 2px solid ${(props) =>
+    props.selected ? props.theme.subMain : props.theme.main};
 
     background-color: ${(props) =>
     props.selected ? props.theme.subMain : props.theme.background};
     }
+`;
+
+const ClearFilterButton = styled(StyledConfirmButton)`
+    width: 50%;
 `;
 
 const SidebarTags: React.FC<tSidebarTagsProps> = (props) => {
@@ -40,6 +49,14 @@ const SidebarTags: React.FC<tSidebarTagsProps> = (props) => {
       navigate('/', { state: { tagName: tagName } });
     }
   };
+
+  const handleClear = (
+    e: React.MouseEvent<HTMLButtonElement, MouseEvent>
+  ) => {
+    setSelectedTag('');
+    navigate('/', { state: { tagName: '' } });
+  };
+
   const tagList = props.tags.map((tag) => (
     <TagWrapper
       key={tag.id}
@@ -50,7 +67,14 @@ const SidebarTags: React.FC<tSidebarTagsProps> = (props) => {
     </TagWrapper>
   ));
 
-  return tagList.length > 0 ? <TagsWrapper>{tagList}</TagsWrapper> : null;
+  return tagList.length > 0 ? (
+    <TagsWrapper>
+      {tagList}
+      <ClearFilterButton onClick={(e) => handleClear(e)}>
+                CLEAR FILTER
+      </ClearFilterButton>
+    </TagsWrapper>
+  ) : null;
 };
 
 export default SidebarTags;
