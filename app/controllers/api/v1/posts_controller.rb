@@ -1,7 +1,7 @@
 module Api
   module V1
     class PostsController < ApplicationController
-      skip_before_action :authenticate_request, only: [:index, :show]
+      skip_before_action :authenticate_request, except: [:create, :update, :destroy]
 
       def index
         @posts = Post.order(created_at: :desc)
@@ -46,14 +46,14 @@ module Api
       end
 
       def search
-        @posts = Post.where("lower(title) LIKE :query OR lower(body) LIKE :query", query: "%#{params[:query]}%")
+        @posts = Post.where("title LIKE :query OR body LIKE :query", query: "%#{params[:query]}%")
                      .order(created_at: :desc)
 
         render json: PostSerializer.new(@posts).serializable_hash.to_json
       end
 
       def tag_search
-        @posts = Post.where(tag: params[:tag]).order(created_at: :desc)
+        @posts = Post.joins(:tags).where("tags.name LIKE :query", query: params[:tag]).order(created_at: :desc)
 
         render json: PostSerializer.new(@posts).serializable_hash.to_json
       end

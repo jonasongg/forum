@@ -1,6 +1,8 @@
 import React from 'react';
+import { useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
-import { StyledConfirmButton } from './styles/SharedStyles';
+import { apiTagSearch } from './api';
+import { Tag } from './styles/SharedStyles';
 import { tTag } from './types';
 
 type TagProps = {
@@ -9,16 +11,6 @@ type TagProps = {
     }[];
 };
 
-const Tag = styled(StyledConfirmButton)`
-    height: fit-content;
-    width: fit-content;
-
-    font-size: 12px;
-    font-weight: 600;
-    border-radius: 5px;
-    padding: 4px 7px;
-`;
-
 const TagsWrapper = styled.div`
     display: flex;
     gap: 10px;
@@ -26,8 +18,21 @@ const TagsWrapper = styled.div`
 `;
 
 const TagList: React.FC<TagProps> = (props) => {
+  const navigate = useNavigate();
+
+  const handleTag = (e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
+    e.preventDefault();
+    navigate('/', {
+      state: {
+        tagName: (e.target as HTMLButtonElement).innerText,
+      },
+    });
+  };
   const tagList = props.tags.map((tag) => (
-    <Tag key={tag.data.attributes.name + tag.data.id}>
+    <Tag
+      key={tag.data.attributes.name + tag.data.id}
+      onClick={(e) => handleTag(e)}
+    >
       {tag.data.attributes.name}
     </Tag>
   ));

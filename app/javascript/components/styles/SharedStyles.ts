@@ -44,3 +44,13 @@ export const Divider = styled.div`
     margin: 0px 0px 0px 2%;
     width: 96%;
 `;
+
+export const Tag = styled(StyledConfirmButton)`
+    height: fit-content;
+    width: fit-content;
+
+    font-size: 12px;
+    font-weight: 600;
+    border-radius: 5px;
+    padding: 4px 7px;
+`;

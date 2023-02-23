@@ -82,7 +82,7 @@ const apiTagSearch = async (tag: string) => {
 };
 
 const apiGetTags = async () => {
-  return axiosInstance.get('/tag');
+  return axiosInstance.get('/tags');
 };
 
 export {

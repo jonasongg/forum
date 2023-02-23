@@ -5,6 +5,7 @@ type tPopupContext = {
     popupPrompted: number;
     setPopupPrompted: React.Dispatch<React.SetStateAction<number>>;
     isCommentDelete: boolean;
+    setIsCommentDelete: React.Dispatch<React.SetStateAction<boolean>>;
     afterDeleteFunction: () => void;
     promptDelete: (afterDeleteValue: () => void) => void;
 };
@@ -26,7 +27,6 @@ const PopupProvider: React.FC<{ children: React.ReactNode }> = ({
 
     const promptDelete = (afterDeleteValue: () => void) => {
       setPopupPrompted(2);
-      setIsCommentDelete(true);
       setAfterDeleteFunction(() => afterDeleteValue);
     };
 
@@ -34,6 +34,7 @@ const PopupProvider: React.FC<{ children: React.ReactNode }> = ({
       popupPrompted,
       setPopupPrompted,
       isCommentDelete,
+      setIsCommentDelete,
       afterDeleteFunction,
       promptDelete,
     };

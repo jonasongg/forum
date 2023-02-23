@@ -1,8 +1,7 @@
-import React, { useContext, useState } from 'react';
+import React, { useContext } from 'react';
 import styled from 'styled-components';
-import { Link, useNavigate } from 'react-router-dom';
+import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { AuthContext } from '../authentication/AuthContext';
-import { apiSearch } from '../api';
 
 type NavbarProps = {
     setSearchInput: React.Dispatch<React.SetStateAction<string>>;
@@ -65,15 +64,19 @@ const SearchInput = styled.input`
 
 const Navbar: React.FC<NavbarProps> = (props) => {
   const auth = useContext(AuthContext);
+  const location = useLocation();
+  const navigate = useNavigate();
 
   const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const inputValue = event.target.value;
     props.setSearchInput(inputValue);
   };
 
-  // const handleSearch = () => {
-  //   apiSearch(input);
-  // };
+  const handleSubmit = (event: React.KeyboardEvent<HTMLInputElement>) => {
+    if (event.key == 'Enter' && location.pathname != '/') {
+      navigate('/');
+    }
+  };
 
   return (
     <Nav>
@@ -82,6 +85,7 @@ const Navbar: React.FC<NavbarProps> = (props) => {
         <SearchInput
           placeholder="Search..."
           onChange={(e) => handleChange(e)}
+          onKeyDown={(e) => handleSubmit(e)}
         />
         {auth.user ? (
         //When user is NOT null (a user is logged in)

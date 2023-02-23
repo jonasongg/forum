@@ -2,8 +2,9 @@ import React, { useState, useEffect } from 'react';
 import styled from 'styled-components';
 import Card from './Card';
 import { tPost } from '../types';
-import { apiGetAllPosts, apiSearch } from '../api';
+import { apiGetAllPosts, apiSearch, apiTagSearch } from '../api';
 import { BasicWrapper, Divider, NoComments } from '../styles/SharedStyles';
+import { useLocation } from 'react-router-dom';
 
 type HomeProps = {
     searchInput: string;
@@ -23,11 +24,14 @@ const NoPosts = styled(NoComments)`
 const Home: React.FC<HomeProps> = (props) => {
   const [posts, setPosts] = useState<tPost[]>([]);
   const [isEmpty, setIsEmpty] = useState(false);
+  const location = useLocation();
 
   useEffect(() => {
     if (props.searchInput.length == 0) {
       (async () => {
-        setPosts((await apiGetAllPosts()).data.data);
+        if (location.state == null || location.state.tagName == '') {
+          setPosts((await apiGetAllPosts()).data.data);
+        }
       })();
     } else {
       (async () => {
@@ -37,6 +41,21 @@ const Home: React.FC<HomeProps> = (props) => {
       })();
     }
   }, [props.searchInput]);
+
+  useEffect(() => {
+    if (location.state == null || location.state.tagName == '') {
+      (async () => {
+        setPosts((await apiGetAllPosts()).data.data);
+      })();
+    } else {
+      (async () => {
+        const response = (await apiTagSearch(location.state.tagName))
+          .data.data;
+        console.log(response);
+        setPosts(response);
+      })();
+    }
+  }, [location.state]);
 
   const postsList = posts.map((post) => (
     <>

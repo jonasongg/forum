@@ -83,6 +83,7 @@ const Comment: React.FC<CommentProps> = (props: CommentProps) => {
   };
 
   const handleDelete = () => {
+    popup.setIsCommentDelete(true);
     popup.promptDelete(deleteComment);
   };
 

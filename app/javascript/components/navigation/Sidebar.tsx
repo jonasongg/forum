@@ -3,8 +3,8 @@ import { Link } from 'react-router-dom';
 import styled from 'styled-components';
 import { apiGetTags } from '../api';
 import { Divider } from '../styles/SharedStyles';
-import TagList from '../TagList';
 import { tTag } from '../types';
+import SidebarTags from './SidebarTags';
 
 const Side = styled.aside`
     display: flex;
@@ -47,6 +47,7 @@ const AlignLeft = styled.div`
 const SearchBy = styled.div`
     font-size: small;
     font-weight: 600;
+    margin-bottom: 10px;
 `;
 
 const Sidebar: React.FC = () => {
@@ -55,14 +56,15 @@ const Sidebar: React.FC = () => {
     (async () => {
       setTags((await apiGetTags()).data.data);
     })();
-  });
+  }, []);
+
   return (
     <Side>
       <CreatePost to="/create">Create a new post</CreatePost>
       <Divider />
       <AlignLeft>
-        {/* <SearchBy>SEARCH BY</SearchBy>
-        <TagList isSidebar={true} tags={tags} /> */}
+        <SearchBy>SEARCH BY</SearchBy>
+        <SidebarTags tags={tags} />
       </AlignLeft>
     </Side>
   );

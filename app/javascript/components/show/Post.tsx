@@ -80,6 +80,7 @@ const tPost: React.FC = () => {
   };
 
   const handleDelete = () => {
+    popup.setIsCommentDelete(false);
     popup.promptDelete(deletePost);
   };
 
