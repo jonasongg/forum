@@ -31,7 +31,7 @@ const TagWrapper = styled.button<{ selected: boolean }>`
 `;
 
 const ClearFilterButton = styled(StyledConfirmButton)`
-    width: 50%;
+    width: 70%;
 `;
 
 const SidebarTags: React.FC<tSidebarTagsProps> = (props) => {
