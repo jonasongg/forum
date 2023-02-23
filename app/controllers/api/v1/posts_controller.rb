@@ -18,6 +18,10 @@ module Api
       def create
         @post = Post.new(post_params)
 
+        if(params.has_key?(:tag))
+          @post.tags << Tag.where(name: params[:tag])
+        end
+
         if @post.save
           render json: PostSerializer.new(@post).serializable_hash.to_json
         else
@@ -27,6 +31,10 @@ module Api
 
       def update
         @post = Post.find(params[:id])
+
+        if(params.has_key?(:tag))
+          @post.tags << Tag.where(name: params[:tag])
+        end
 
         if @post.update(post_params)
           render json: PostSerializer.new(@post).serializable_hash.to_json

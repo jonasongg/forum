@@ -50,9 +50,7 @@ const SidebarTags: React.FC<tSidebarTagsProps> = (props) => {
     }
   };
 
-  const handleClear = (
-    e: React.MouseEvent<HTMLButtonElement, MouseEvent>
-  ) => {
+  const handleClear = () => {
     setSelectedTag('');
     navigate('/', { state: { tagName: '' } });
   };
@@ -70,7 +68,7 @@ const SidebarTags: React.FC<tSidebarTagsProps> = (props) => {
   return tagList.length > 0 ? (
     <TagsWrapper>
       {tagList}
-      <ClearFilterButton onClick={(e) => handleClear(e)}>
+      <ClearFilterButton onClick={() => handleClear()}>
                 CLEAR FILTER
       </ClearFilterButton>
     </TagsWrapper>

@@ -1,11 +1,11 @@
 import React, { useContext, useEffect, useState } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
-import { apiPostPost, apiPutPost } from '../api';
+import { apiGetTags, apiPostPost, apiPutPost } from '../api';
 import { AuthContext } from '../authentication/AuthContext';
 import CustomTextArea from '../CustomTextArea';
 import { BasicWrapper, PostCommentButton } from '../styles/SharedStyles';
-import { tUser } from '../types';
+import { tTag, tUser } from '../types';
 
 const NewPostForm = styled.form`
     display: flex;
@@ -22,6 +22,25 @@ const NewPostHeader = styled.div`
     justify-content: flex-start;
     font-size: larger;
     font-weight: 600;
+`;
+
+const TagsWrapper = styled.div`
+    display: flex;
+    align-items: center;
+
+    gap: 13px;
+`;
+
+const TagWrapper = styled.button<{ selected: boolean }>`
+    padding: 25px;
+    font-size: medium;
+    justify-content: flex-start;
+    border: 2px solid ${(props) =>
+    props.selected ? props.theme.subMain : props.theme.main};
+
+    background-color: ${(props) =>
+    props.selected ? props.theme.subMain : props.theme.background};
+    }
 `;
 
 type stateType = {
@@ -41,12 +60,21 @@ const PostForm: React.FC = () => {
   const stateData = useLocation().state as stateType;
   const [isEdit, setIsEdit] = useState(false);
 
+  const [tags, setTags] = useState<tTag[]>([]);
+  const [selectedTag, setSelectedTag] = useState('');
+
   useEffect(() => {
     if (stateData) {
       setTitle(stateData.title);
       setBody(stateData.body);
       setIsEdit(true);
     }
+  }, []);
+
+  useEffect(() => {
+    (async () => {
+      setTags((await apiGetTags()).data.data);
+    })();
   }, []);
 
   const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
@@ -65,9 +93,8 @@ const PostForm: React.FC = () => {
       title: title,
       body: body,
       user_id: user.id,
+      tag: selectedTag,
     };
-    console.log(data);
-    console.log(stateData.originalPost);
 
     if (isEdit) {
       console.log(isEdit);
@@ -78,6 +105,26 @@ const PostForm: React.FC = () => {
 
     navigate(isEdit ? stateData.originalPost : '/');
   };
+
+  const handleTag = (e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
+    e.preventDefault();
+    const tagName = (e.target as HTMLButtonElement).innerText;
+    if (selectedTag == tagName) {
+      setSelectedTag('');
+    } else {
+      setSelectedTag(tagName);
+    }
+  };
+
+  const tagList = tags.map((tag) => (
+    <TagWrapper
+      key={tag.id}
+      onClick={(e) => handleTag(e)}
+      selected={selectedTag == tag.attributes.name}
+    >
+      {tag.attributes.name}
+    </TagWrapper>
+  ));
 
   return (
     <BasicWrapper>
@@ -97,6 +144,7 @@ const PostForm: React.FC = () => {
           useErrorState={[bodyError, setBodyError]}
           autoFocus={false}
         />
+        <TagsWrapper>{tagList}</TagsWrapper>
         <PostCommentButton>POST</PostCommentButton>
       </NewPostForm>
     </BasicWrapper>
