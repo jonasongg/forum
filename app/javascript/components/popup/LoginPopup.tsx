@@ -8,7 +8,12 @@ import {
 } from '../styles/SharedStyles';
 import { AuthContext } from '../authentication/AuthContext';
 
-const UsernameInput = styled.input<{ error: boolean }>`
+const LoginForm = styled.form`
+    display: flex;
+    flex-direction: column;
+`;
+
+const UsernamePWInput = styled.input<{ error: boolean }>`
     width: 40%;
     height: 40px;
     border: none;
@@ -37,31 +42,50 @@ const ErrorMessage = styled.div`
 `;
 
 const LoginPopup: React.FC = () => {
-  const [error, setError] = useState(false);
-  const [valid, setValid] = useState(true);
-  const [input, setInput] = useState('');
+  const [usernameError, setUsernameError] = useState(false);
+  const [usernameValid, setUsernameValid] = useState(true);
+  const [usernameInput, setUsernameInput] = useState('');
+  const [passwordError, setPasswordError] = useState(false);
+  const [passwordValid, setPasswordValid] = useState(true);
+  const [passwordInput, setPasswordInput] = useState('');
+  const [invalidLogin, setInvalidLogin] = useState(false);
   const auth = useContext(AuthContext);
   const popup = useContext(PopupContext);
 
-  const handleChange = (event: React.FormEvent<HTMLInputElement>) => {
-    setInput((event.target as HTMLInputElement).value);
+  const handleUsernameChange = (event: React.FormEvent<HTMLInputElement>) => {
+    setUsernameInput((event.target as HTMLInputElement).value);
+  };
+  const handlePasswordChange = (event: React.FormEvent<HTMLInputElement>) => {
+    setPasswordInput((event.target as HTMLInputElement).value);
   };
 
   //Error when user tries submitting invalid username but cleared as soon as it becomes valid
   useEffect(() => {
-    setValid(/[A-z0-9À-ž]{5,}/.test(input));
-    if (valid && error) {
-      setError(false);
+    setUsernameValid(/[A-z0-9À-ž]{5,}/.test(usernameInput));
+    if (usernameValid && usernameError) {
+      setUsernameError(false);
     }
-  }, [input]);
+  }, [usernameInput]);
+
+  //Error when user tries submitting invalid password but cleared as soon as it becomes valid
+  useEffect(() => {
+    setPasswordValid(/[A-z0-9]{5,}/.test(passwordInput));
+    if (passwordValid && passwordError) {
+      setPasswordError(false);
+    }
+  }, [passwordInput]);
 
   const handleProceed = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
-    if (!valid) {
-      setError(true);
+    if (!usernameValid || !passwordValid) {
+      setUsernameError(!usernameValid);
+      setPasswordError(!passwordValid);
     } else {
-      auth.login(input);
-      popup.setPopupPrompted(0);
+      try {
+        await auth.login(usernameInput, passwordInput);
+      } catch (error) {
+        setInvalidLogin(true);
+      }
     }
   };
 
@@ -71,18 +95,36 @@ const LoginPopup: React.FC = () => {
       <div>
                 Enter your existing username or a new one to create a new user.
       </div>
-      <form onSubmit={handleProceed}>
-        <UsernameInput
+      <LoginForm onSubmit={handleProceed}>
+        <UsernamePWInput
           placeholder="username"
           type="text"
           name="username"
-          onChange={handleChange}
-          error={error}
+          onChange={handleUsernameChange}
+          error={usernameError || invalidLogin}
         />
-        {error && (
+        {usernameError && (
           <ErrorMessage>
                         Username must be at least 5 characters long and contain
                         only alphanumeric characters.
+          </ErrorMessage>
+        )}
+        <UsernamePWInput
+          placeholder="password"
+          type="password"
+          name="password"
+          onChange={handlePasswordChange}
+          error={passwordError || invalidLogin}
+        />
+        {passwordError && (
+          <ErrorMessage>
+                        Password must be at least 5 characters long and contain
+                        only alphanumeric characters.
+          </ErrorMessage>
+        )}
+        {invalidLogin && (
+          <ErrorMessage>
+                        Invalid login! Try again or create a new account.
           </ErrorMessage>
         )}
         <ButtonsWrapper>
@@ -93,7 +135,7 @@ const LoginPopup: React.FC = () => {
                         CANCEL
           </button>
         </ButtonsWrapper>
-      </form>
+      </LoginForm>
     </>
   );
 };

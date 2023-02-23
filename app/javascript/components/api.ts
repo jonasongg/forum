@@ -18,9 +18,10 @@ axiosInstance.interceptors.request.use(
   }
 );
 
-const apiPostLogin = async (username: string) => {
+const apiPostLogin = async (username: string, password: string) => {
   return axiosInstance.post('/login', {
     username: username,
+    password: password,
   });
 };
 

@@ -6,7 +6,7 @@ import { tToken, tUser } from '../types';
 
 type tAuthContext = {
     user: tUser | null;
-    login: (username: string) => Promise<tUser | null>;
+    login: (username: string, password: string) => Promise<tUser | null>;
     promptLogin: (afterLoginValue?: (user: tUser) => void) => void;
     logout: () => void;
 };
@@ -43,33 +43,21 @@ const AuthProvider: React.FC<AuthProviderProps> = (props) => {
     })();
   }, []);
 
-  //Add interceptor to handle unauthorised error by opening login prompt
-  // useEffect(() => {
-  //   axiosInstance.interceptors.response.use(
-  //     (rsp) => rsp,
-  //     (error) => {
-  //       if (error.response.status === 401) {
-  //         auth.setLoginPrompted(true);
-  //       }
-  //     }
-  //   );
-  // }, []);
-
   const auth = () => {
-    const login = async (username: string) => {
-      // if (user) {
-      //   //If already logged in, return logged in user; else, try to login
-      //   return user;
-      // } else {
-
+    const login = async (username: string, password: string) => {
       //If valid username, post with axios and set token in localStorage
-      const token = (await apiPostLogin(username)).data.token;
-      localStorage.setItem('token', token);
+      try {
+        const token = (await apiPostLogin(username, password)).data
+          .token;
+        localStorage.setItem('token', token);
 
-      setUser(await decodeUser(token));
+        setUser(await decodeUser(token));
+        popup.setPopupPrompted(0);
 
-      return user;
-      // }
+        return user;
+      } catch (error) {
+        return Promise.reject(error);
+      }
     };
 
     const promptLogin = (afterLoginValue?: (user: tUser) => void) => {

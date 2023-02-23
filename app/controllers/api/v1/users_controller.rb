@@ -12,22 +12,29 @@ module Api
       def login
         @user = User.find_by_username(params[:username])
         
-        unless @user
+        if @user 
+          if @user.authenticate(params[:password])
+            token = jwt_encode(user_id: @user.id)
+            render json: { token: token }
+          else
+            render json: { error: @user.errors.messages }, status: :unauthorized
+          end
+        else
           @user = User.new(user_params)
 
           unless @user.save
-            render json: { error: @user.messages.error }, status: :unprocessable_entity
+            render json: { error: @user.errors.messages }, status: :unprocessable_entity
           end
+          
+          token = jwt_encode(user_id: @user.id)
+          render json: { token: token }
         end
 
-        token = jwt_encode(user_id: @user.id)
-
-        render json: { token: token }
       end
 
       private
       def user_params
-        params.require(:user).permit(:username)
+        params.require(:user).permit(:username, :password)
       end
     end
   end
